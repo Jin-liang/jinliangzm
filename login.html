@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link href="WebView/Asset/css/loginv2.css" rel="stylesheet" type="text/css" />
+    <link href="WebView/Asset/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="WebView/Asset/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+    <link href="WebView/Asset/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="WebView/Asset/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <link href="WebView/Asset/css/animate.css" rel="stylesheet">
+    <link href="WebView/Asset/css/style.css?v=4.1.0" rel="stylesheet">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>楼通宝智慧楼宇管理平台V1.0-用户登录</title>
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+    <!--<script>if(window.top !== window.self){ window.top.location = window.location;}</script>-->
+    <style>
+        label.error{
+            float:left;
+            margin:5px 0 5px;
+        }
+
+        .field-input-wrapper{
+            height:70px;
+            position:relative;
+        }
+        .login-field-label{
+            width:64px;
+            height:48px;
+            line-height:48px;
+            padding-left:0px;
+            padding-right:0px;
+           position:absolute;
+           left:12px;
+           top:0   
+         }
+        .form-group{
+            margin-bottom:0px;
+        }
+        .form-control{
+            width:100%;
+            height:48px;
+            border-radius:30px;
+            padding-left:100px;
+            background-color:#ffffff;
+            font-size: 16px;
+        }
+        
+    </style>
+</head>
+<body style="background: url('WebView/Asset/img/loginbg.jpg') no-repeat ; background-size:100% 100%; ">
+
+    <div class="middle-box text-center loginscreen  animated fadeInDown">
+        <div style="margin-top:30%;font-size:16px;width:300px;">
+            <div>
+                <h1 class="logo-name" style="width: 118px; height: 110px;margin:0 auto;    background-image: url('WebView/Asset/img/login/LOGO.png'); background-size: 100% 100%; "></h1>
+            </div>
+            <h3 style="margin-bottom: 60px;margin-top: 20px;color: #a5b1c7;">楼通宝管理平台</h3>
+            <form class="m-t" role="form" action="index.html" id="loginForm">
+                <div class="form-group field-input-wrapper">
+                    <label class="col-sm-3 control-label login-field-label" >用户名</label>
+                    <input type="text" class="form-control" placeholder="用户名"  id="txtMobile" name="txtMobile" maxlength="11">
+                </div>
+                <div class="form-group field-input-wrapper">
+                    <label class="col-sm-3 control-label login-field-label">密&nbsp;&nbsp;码</label>
+                    <input type="password" class="form-control" placeholder="密码" id="txtPwd" name="txtPwd" maxlength="18">
+                </div>
+                <a href="#" class="login-btn" style="display:block;width:100%;height: 48px; background-image: url('WebView/Asset/img/login/btn-login.png');background-size:100% 100%;background-color:#374654;border-radius:30px;"></a>
+
+                <!--<p class="text-muted text-center">
+                    <a href="login.html#"><small>忘记密码了？</small></a> | <a href="register.html">注册一个新账号</a>
+                </p>-->
+            </form>
+        </div>
+    </div>
+    <!-- 第三方插件 -->
+    <script src="WebView/Asset/js/jquery.min.js?v=2.1.4"></script>
+    <script src="WebView/Asset/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="WebView/Asset/js/plugins/validate/jquery.validate.min.js"></script>
+    <script src="WebView/Asset/js/plugins/validate/additional-methods.js"></script>
+    <script src="WebView/Asset/js/plugins/validate/messages_zh.min.js"></script>
+    <script src="WebView/Asset/js/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="WebView/Asset/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="WebView/Asset/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="WebView/Asset/js/plugins/layer/layer.min.js"></script>
+    <script src="WebView/Asset/js/md5/js/md5.min.js"></script>    　
+    <!-- 自定义公共js -->
+
+    <script src="WebView/Asset/js/hplus.js?v=4.1.0"></script>
+    <script type="text/javascript" src="WebView/Asset/js/contabs.js"></script>
+    <script src="WebView/Asset/js/jquery.cookie.js"></script>
+    <script src="WebView/Asset/js/defer.js"></script>
+
+    <script>
+        setTimeout( function () {
+            loadScript( serviceUrl + "login/login.js" )
+        }, 200 );
+
+    </script>
+</body>
+
+</html>
+
