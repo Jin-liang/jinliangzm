@@ -1,2 +1,2 @@
-# jinliangzm
-newgame
+# 金亮子木的简介
+主要是游戏产品
