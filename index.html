@@ -1,104 +1,262 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <link href="WebView/Asset/css/loginv2.css" rel="stylesheet" type="text/css" />
-    <link href="WebView/Asset/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
-    <link href="WebView/Asset/css/font-awesome.css?v=4.4.0" rel="stylesheet">
-    <link href="WebView/Asset/css/plugins/iCheck/custom.css" rel="stylesheet">
-    <link href="WebView/Asset/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
-    <link href="WebView/Asset/css/animate.css" rel="stylesheet">
-    <link href="WebView/Asset/css/style.css?v=4.1.0" rel="stylesheet">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>楼通宝智慧楼宇管理平台V1.0-用户登录</title>
-    <!--[if lt IE 9]>
-    <meta http-equiv="refresh" content="0;ie.html" />
-    <![endif]-->
-    <!--<script>if(window.top !== window.self){ window.top.location = window.location;}</script>-->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/font-awesome/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Lora:400i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,600" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Crimson+Text" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <script type="text/javascript" src="assets/js/script.js" ></script>
+    <title>jinliangzm</title>
     <style>
-        label.error{
-            float:left;
-            margin:5px 0 5px;
-        }
-
-        .field-input-wrapper{
-            height:70px;
-            position:relative;
-        }
-        .login-field-label{
-            width:64px;
-            height:48px;
-            line-height:48px;
-            padding-left:0px;
-            padding-right:0px;
-           position:absolute;
-           left:12px;
-           top:0   
-         }
-        .form-group{
-            margin-bottom:0px;
-        }
-        .form-control{
-            width:100%;
-            height:48px;
-            border-radius:30px;
-            padding-left:100px;
-            background-color:#ffffff;
-            font-size: 16px;
-        }
-        
+      body {
+        background-color: lightblue;
+      }
     </style>
 </head>
-<body style="background: url('WebView/Asset/img/loginbg.jpg') no-repeat ; background-size:100% 100%; ">
+<body>
+<!-- div used to make the body blur -->
+    <div class="overlay" id="overlay" onclick="closeNav()"></div>
 
-    <div class="middle-box text-center loginscreen  animated fadeInDown">
-        <div style="margin-top:30%;font-size:16px;width:300px;">
-            <div>
-                <h1 class="logo-name" style="width: 118px; height: 110px;margin:0 auto;    background-image: url('WebView/Asset/img/login/LOGO.png'); background-size: 100% 100%; "></h1>
+    <section class="head index-part-1">
+        <div class="head-bar">
+            <div class="container">
+              <div class="row">
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                    <a href="index.html"><img class="img-responsive" src="assets/img/log1.png"></a>
+                </div>
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6 text-right">
+                    <div id="mySidenav" class="sidenav text-center">
+                        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a><br>
+                        <a href="index.html">Home</a><hr>
+                        <a href="generic.html">Our game</a><hr>
+                        <a href="element.html">Privacy Policy</a>              
+                    </div>
+                    <div class="main" id="main">
+                      <a href="#" onclick="openNav()">MENU &#9776;</a>
+                    </div>
+                </div>
+              </div>
+              <hr>
+          </div>
+          </div>
+          <div class="wow">
+          <div class="container">
+            <div class="row">
+               <div class="wow-logo">
+                  <img class="img-responsive img-logo" src="assets/img/log.png">
+               </div> 
+               <div class="font-1 helmet text-center">
+                 <p>An <strong>immersive</strong> vertual reality helmet.</p>
+               </div>
+              
             </div>
-            <h3 style="margin-bottom: 60px;margin-top: 20px;color: #a5b1c7;">楼通宝管理平台</h3>
-            <form class="m-t" role="form" action="index.html" id="loginForm">
-                <div class="form-group field-input-wrapper">
-                    <label class="col-sm-3 control-label login-field-label" >用户名</label>
-                    <input type="text" class="form-control" placeholder="用户名"  id="txtMobile" name="txtMobile" maxlength="11">
-                </div>
-                <div class="form-group field-input-wrapper">
-                    <label class="col-sm-3 control-label login-field-label">密&nbsp;&nbsp;码</label>
-                    <input type="password" class="form-control" placeholder="密码" id="txtPwd" name="txtPwd" maxlength="18">
-                </div>
-                <a href="#" class="login-btn" style="display:block;width:100%;height: 48px; background-image: url('WebView/Asset/img/login/btn-login.png');background-size:100% 100%;background-color:#374654;border-radius:30px;"></a>
-
-                <!--<p class="text-muted text-center">
-                    <a href="login.html#"><small>忘记密码了？</small></a> | <a href="register.html">注册一个新账号</a>
-                </p>-->
-            </form>
+          </div>
         </div>
-    </div>
-    <!-- 第三方插件 -->
-    <script src="WebView/Asset/js/jquery.min.js?v=2.1.4"></script>
-    <script src="WebView/Asset/js/bootstrap.min.js?v=3.3.6"></script>
-    <script src="WebView/Asset/js/plugins/validate/jquery.validate.min.js"></script>
-    <script src="WebView/Asset/js/plugins/validate/additional-methods.js"></script>
-    <script src="WebView/Asset/js/plugins/validate/messages_zh.min.js"></script>
-    <script src="WebView/Asset/js/plugins/sweetalert/sweetalert.min.js"></script>
-    <script src="WebView/Asset/js/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <script src="WebView/Asset/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-    <script src="WebView/Asset/js/plugins/layer/layer.min.js"></script>
-    <script src="WebView/Asset/js/md5/js/md5.min.js"></script>    　
-    <!-- 自定义公共js -->
+    </section>
+ 
+    <section class="index-part-2">
+         <div class="container">
 
-    <script src="WebView/Asset/js/hplus.js?v=4.1.0"></script>
-    <script type="text/javascript" src="WebView/Asset/js/contabs.js"></script>
-    <script src="WebView/Asset/js/jquery.cookie.js"></script>
-    <script src="WebView/Asset/js/defer.js"></script>
+            <div class="row">
+               <div class="text-center">
+                 <h2>Features</h2>
+               </div>
+               <hr class="hr-mid">
+               <div class="sub-text text-center">
+                     <p class="font-1">
+                        Sed varius suspendisse dictum leo ipsum amet pellentesque
+                        fusce ac hendrerit consectetur tempor lorem ipsum
+                     </p>
+               </div>
+           </div>
 
-    <script>
-        setTimeout( function () {
-            loadScript( serviceUrl + "login/login.js" )
-        }, 200 );
+            <div class="row">
 
-    </script>
+                <div class="col-xs-12 col-lg-6 col-sm-6 col-md-6 col-block">
+                      <div class="block text-center block-first">
+                                 <div class="icon">
+                                    <i class="fa fa-diamond fa-2x"></i>
+                                 </div>  
+                                   <h4>Supreme comfort</h4>
+                                   <p class="font-2">Lorem ipsum dolor sit amet, consectetur
+                                   adipisicing elit, sed do eiusmod tempor
+                                   incididunt ut labore et.</p>
+                        </div>   
+                </div>
+                <div class="col-xs-12 col-lg-6 col-sm-6 col-md-6 col-block">
+                      <div class="block text-center block-second">
+                             <div class="icon">
+                                  <i class="fa fa-camera fa-2x"></i>
+                             </div>  
+                              <h4>Immersive experince</h4>
+                              <p class="font-2">Lorem ipsum dolor sit amet, consectetur
+                                  adipisicing elit, sed do eiusmod tempor
+                                  incididunt ut labore et.</p>                                       
+                      </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 col-lg-6 col-sm-6 col-md-6 col-block">
+                    <div class="block text-center block-third">
+                                 <div class="icon">
+                                     <i class="fa fa-eye fa-2x"></i>
+                                 </div>  
+                                   <h4>complete focus</h4>
+                                   <p class="font-2">Lorem ipsum dolor sit amet, consectetur
+                                   adipisicing elit, sed do eiusmod tempor
+                                   incididunt ut labore et.</p>
+                    </div>   
+                </div>
+                <div class="col-xs-12 col-lg-6 col-sm-6 col-md-6 col-block">
+                    <div class="block text-center block-last">
+                            <div class="icon">
+                                 <i class="fa fa-sliders fa-2x"></i>
+                            </div>  
+                            <h4>Convenient control</h4>
+                            <p class="font-2">Lorem ipsum dolor sit amet, consectetur
+                                  adipisicing elit, sed do eiusmod tempor
+                                  incididunt ut labore et.</p>                                        
+                      </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+    <section class="index-part-3">
+        <div class="container">
+                <div class="row why-div">
+                  <div class="text-center">
+                         <h2>Why wow</h2>
+                  </div>
+                       <hr class="hr-mid">
+                       <div class="sub-text text-center">
+                             <p class="font-1">
+                                Sed varius suspendisse dictum leo ipsum amet pellentesque
+                                fusce ac hendrerit consectetur tempor lorem ipsum
+                             </p>
+                       </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-9 col-sm-12 col-md-9 col-xs-12">
+                     <div class="holder-para">
+                      <h3>Comfortable stap holder</h3>
+                      <hr class="hr-short">
+                      <p class="font-2">
+                            The path of the righteous man is beset on all sides by the iniquities of the selfish and the tyranny of evil men. Blessed 
+                            is he who, in the name of charity and good will, shepherds the weak through the valley of darkness, for he is truly his brother’s keeper and the finder of lost children. And I will strike down upon thee with great vengeance and furious anger those who would attempt to poison and destroy My brothers. And you will know My name is the Lord when I 
+                      </p>
+                     </div>
+                    </div>
+                    <div class="col-lg-3 col-xs-12 col-sm-12 col-md-3">
+                            <div class="holder-img">
+                              <img class="round-img img-responsive center-block" src="assets/img/2.jpg">
+                            </div>
+                    </div>
+                </div>
+
+                <hr class="line-full">
+                
+                <div class="row"> 
+                    <div class="col-lg-9 col-xs-12 col-sm-12 col-md-9 col-md-push-3">
+                     <div class="holder-para">
+                      <h3>Tracking with controler</h3>
+                      <hr class="hr-short">
+                      <p class="font-2">
+                        The path of the righteous man is beset on all sides by the iniquities of the selfish and the tyranny of evil men. Blessed 
+                        is he who, in the name of charity and good will, shepherds the weak through the valley of darkness, for he is truly his brother’s keeper and the finder of lost children. And I will strike down upon thee with great vengeance and furious anger those who would attempt to poison and destroy My brothers. And you will know My name is the Lord when I 
+                      </p>
+                     </div>
+                    </div>
+                    <div class="col-lg-3 col-xs-12 col-sm-12 col-md-3 col-md-pull-9">
+                            <div class="holder-img">
+                              <img class="round-img img-responsive center-block" src="assets/img/3.jpg">
+                            </div>
+                    </div> 
+                </div>
+
+                <hr class="line-full">
+                
+                <div class="row">
+                    <div class="col-lg-9 col-xs-12 col-sm-12 col-md-9">
+                     <div class="holder-para">
+                      <h3>Foam cushing</h3>
+                      <hr class="hr-short">
+                      <p class="font-2">
+                            The path of the righteous man is beset on all sides by the iniquities of the selfish and the tyranny of evil men. Blessed 
+                            is he who, in the name of charity and good will, shepherds the weak through the valley of darkness, for he is truly his brother’s keeper and the finder of lost children. And I will strike down upon thee with great vengeance and furious anger those who would attempt to poison and destroy My brothers. And you will know My name is the Lord when I  
+                      </p>
+                     </div>
+                    </div>
+                    <div class="col-lg-3 col-xs-12 col-sm-12 col-md-3">
+                            <div class="holder-img">
+                              <img class="round-img img-responsive center-block" src="assets/img/2.jpg">
+                            </div>
+                    </div>
+                </div>
+        </div>
+    </section>
+                
+    <section class="index-part-4">
+         <div class="container">
+                
+                <div class="row">
+                       <div class="text-center">
+                         <h2>Step in wow</h2>
+                       </div>
+                       <hr class="hr-mid">
+                       <div class="sub-text text-center">
+                             <p class="font-1">
+                                Sed varius suspendisse dictum leo ipsum amet pellentesque
+                                fusce ac hendrerit consectetur tempor lorem ipsum
+                             </p>
+                       </div>
+                </div>
+
+                <div class="row text-center">
+                     <a class="btn btn-default wow-button" href="#">BUY WOW NOW</a>
+                </div>
+          </div>
+    </section>
+
+    <section class="social">
+      <ul>
+        <li><a href="#" class="fa fa-pinterest fa-2x" aria-hidden="true"></a></li>
+        <li><a href="#" class="fa fa-twitter fa-2x" aria-hidden="true"></a></li>
+        <li><a href="#" class="fa fa-linkedin fa-2x" aria-hidden="true"></a></li>
+        <li><a href="#" class="fa fa-stumbleupon fa-2x" aria-hidden="true"></a></li>  
+      </ul>
+    </section>
+
+    <section class="footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+            <div class="footer-p1">
+                    <p class="font-2">Copy right 2016 by wow technology</p>
+            </div>
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+            <img class="img-responsive foot-img" src="assets/img/footer-logo.png">
+          </div>
+          <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+            <div class="footer-p2" >
+                     <p class="font-2">Made with  <i class="fa fa-heart" aria-hidden="true" ></i> by <a href="https://themewagon.com/themes/" target="_blank">themewagon</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+ 
 </body>
-
 </html>
+
 
