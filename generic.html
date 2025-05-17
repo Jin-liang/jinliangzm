@@ -13,7 +13,33 @@
     <link href="https://fonts.googleapis.com/css?family=Crimson+Text" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
     <script type="text/javascript" src="assets/js/script.js" ></script>
-    <title>WOW - Generic</title>
+    <title>NEW FOLDER - Our Games</title>
+    <style>
+        .game-card {
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .game-card:hover {
+            transform: translateY(-10px);
+        }
+        .game-card img {
+            width: 100%;
+            height: auto;
+        }
+        .games-section {
+            padding: 50px 0;
+            background-color: #f8f9fa;
+        }
+        .section-title {
+            margin-bottom: 50px;
+            color: #2d2d4b;
+            font-weight: bold;
+            font-size: 36px;
+        }
+    </style>
 </head>
 <body>
 <!-- div used to make the body blur -->
@@ -29,12 +55,13 @@
               <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6 text-right">
                   <div id="mySidenav" class="sidenav text-center">
                     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a><br>
-                    <a href="index.html">Home</a><hr>
-                    <a href="generic.html">Generic</a><hr>
-                    <a href="element.html">Element</a>              
+                    <a href="index.html" data-i18n="home">Home</a><hr>
+                    <a href="generic.html" data-i18n="generic">Generic</a><hr>
+                    <a href="element.html" data-i18n="element">Element</a><hr>
+                    <a href="javascript:void(0)" id="langToggle" onclick="toggleLanguage()" data-i18n="switchLang">Switch to Chinese</a>              
                 </div>
                   <div class="main" id="main">
-                    <a href="#" onclick="openNav()">MENU &#9776;</a>
+                    <a href="#" onclick="openNav()" data-i18n="menu">MENU &#9776;</a>
                   </div>
               </div>
             </div>
@@ -42,21 +69,34 @@
         </div>
     </section>
     <div class="container">
-        <section class="generic text-center">
-           <h2>Generic</h2>
-          <hr class="hr-mid">
-            <img class="img-generic img-responsive" src="assets/img/5.jpg">
-        </section>
-        <section class="font-2">
-            <p class="generic-p">
-            Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fergiat. Pellentesque in mi eu massa lacinia malesuada et a elit. Donec urna ex, lacinia in purus ac, pretium pulvinar mauris. Curabitur sapien risus, commodo eget turpis at, elementum convallis elit. Pellentesque enim turpis, hendrerit tristique.
-            </p> 
-            <p class="generic-p">
-            Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fersapien risus, commodo eget turpis at, elementum convallis elit. Pellentesque enim turpis, hendrerit tristique lorem ipsum dolor.
-            </p>
-            <p class="generic-p">
-            Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fergiat. Pellentesque in mi eu massa lacinia malesuada et a elit. Donec urna ex, lacinia in purus ac, pretium pulvinar mauris. Curabitur sapien risus, commodo eget turpis at, elementum convallis elit. Pellentesque enim turpis, hendrerit tristique. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fersapien risus, commodo eget turpis.<
-            </p>
+        <section class="games-section">
+            <h2 class="section-title text-center" data-i18n="genericTitle">Our Games</h2>
+            <div class="row">
+                <div class="col-md-4 col-sm-6">
+                    <div class="game-card">
+                        <img src="assets/img/game_cat.svg" alt="I AM CAT" class="img-responsive">
+                        <div class="game-info text-center p-3">
+                            <h4>I AM CAT</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="game-card">
+                        <img src="assets/img/game_security.svg" alt="I AM SECURITY" class="img-responsive">
+                        <div class="game-info text-center p-3">
+                            <h4>I AM SECURITY</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="game-card">
+                        <img src="assets/img/game_titans.svg" alt="TITANS CLINIC" class="img-responsive">
+                        <div class="game-info text-center p-3">
+                            <h4>TITANS CLINIC</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
     </div>
     </section>
@@ -89,5 +129,6 @@
       </div>
     </section>
 
+    <script src="assets/js/language.js"></script>
 </body>
 </html>
