@@ -13,6 +13,7 @@
     <link href="https://fonts.googleapis.com/css?family=Crimson+Text" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
     <script type="text/javascript" src="assets/js/script.js" ></script>
+    <script src="assets/js/language.js"></script>
     <title>jinliangzm</title>
     <style>
       body {
@@ -34,12 +35,13 @@
                 <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6 text-right">
                     <div id="mySidenav" class="sidenav text-center">
                         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a><br>
-                        <a href="index.html">Home</a><hr>
-                        <a href="generic.html">Our game</a><hr>
-                        <a href="element.html">Privacy Policy</a>              
+                        <a href="index.html" data-i18n="home">Home</a><hr>
+                        <a href="generic.html" data-i18n="generic">Our game</a><hr>
+                        <a href="element.html" data-i18n="element">Privacy Policy</a><hr>
+                        <a href="javascript:void(0)" id="langToggle" onclick="toggleLanguage()" data-i18n="switchLang">Switch to Chinese</a>              
                     </div>
                     <div class="main" id="main">
-                      <a href="#" onclick="openNav()">MENU &#9776;</a>
+                      <a href="#" onclick="openNav()" data-i18n="menu">MENU &#9776;</a>
                     </div>
                 </div>
               </div>
@@ -222,7 +224,7 @@
                 </div>
 
                 <div class="row text-center">
-                     <a class="btn btn-default wow-button" href="#">BUY WOW NOW</a>
+                     <a class="btn btn-default wow-button" href="#" data-i18n="buyNow">BUY WOW NOW</a>
                 </div>
           </div>
     </section>
@@ -241,7 +243,7 @@
         <div class="row">
           <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
             <div class="footer-p1">
-                    <p class="font-2">Copy right 2016 by wow technology</p>
+                    <p class="font-2" data-i18n="copyright">Copy right 2016 by wow technology</p>
             </div>
           </div>
           <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
@@ -249,7 +251,7 @@
           </div>
           <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
             <div class="footer-p2" >
-                     <p class="font-2">Made with  <i class="fa fa-heart" aria-hidden="true" ></i> by <a href="https://themewagon.com/themes/" target="_blank">themewagon</a></p>
+                     <p class="font-2"><span data-i18n="madeWith">Made with</span> <i class="fa fa-heart" aria-hidden="true" ></i> <span data-i18n="by">by</span> <a href="https://themewagon.com/themes/" target="_blank">themewagon</a></p>
             </div>
           </div>
         </div>
