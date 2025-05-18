@@ -29,12 +29,13 @@
                 <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6 text-right">
                     <div id="mySidenav" class="sidenav text-center">
                     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a><br>
-                    <a href="index.html">Home</a><hr>
-                    <a href="generic.html">Generic</a><hr>
-                    <a href="element.html">Element</a>              
+                    <a href="index.html" data-i18n="home">Home</a><hr>
+                    <a href="generic.html" data-i18n="generic">Generic</a><hr>
+                    <a href="element.html" data-i18n="element">Element</a><hr>
+                    <a href="javascript:void(0)" id="langToggle" onclick="toggleLanguage()" data-i18n="switchLang">Switch to Chinese</a>              
                 </div>
                     <div class="main" id="main">
-                      <a href="#" onclick="openNav()">MENU &#9776;</a>
+                      <a href="#" onclick="openNav()" data-i18n="menu">MENU &#9776;</a>
                     </div>
                 </div>
               </div>
@@ -43,17 +44,17 @@
         </section>
         <section class="element-page">
           <div class="container">
-            <h2 class="text-center">Element</h2>
+            <h2 class="text-center" data-i18n="elementTitle">Element</h2>
             <hr class="hr-mid">
 
             <section class="Element-heading">
-              <h1>Heading 1 With Paragraph</h1>
-              <p class="Element-heading-para font-2">
+              <h1 data-i18n="heading1">Heading 1 With Paragraph</h1>
+              <p class="Element-heading-para font-2" data-i18n="headingPara">
                 Lorem Ipsum available, but the majority have suffered This alteration in some form, by injected is a humour, or randomised words which don`t look even sligh is made  believable. If  to use and yammi passage of Lorem Ipsum, you need to be sure there isn`t by pioneer designer anything embarrassing hidden in the middle of text.
               </p>
             </section>
             <section class="Element-heading">
-                <h2>Heading 2 With Paragraph</h2>
+                <h2 data-i18n="heading2">Heading 2 With Paragraph</h2>
                 <p class="Element-heading-para font-2">
                   Lorem Ipsum available, but the majority have suffered This alteration in some form, by injected is a humour, or randomised words which don`t look even sligh is made  believable. If  to use and yammi passage of Lorem Ipsum, you need to be sure there isn`t by pioneer designer anything embarrassing hidden in the middle of text.
                 </p>
@@ -246,6 +247,8 @@
           </div>
         </section>
  </section>
+    <script src="assets/js/script.js"></script>
+    <script src="assets/js/language.js"></script>
 </body>
 </html>
 

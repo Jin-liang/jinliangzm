@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <!-- 背景 -->
+  <rect width="400" height="300" fill="#ffecd1" rx="15" ry="15"/>
+  
+  <!-- 猫咪 -->
+  <ellipse cx="200" cy="150" rx="80" ry="70" fill="#ff9d4d"/>
+  <circle cx="160" cy="120" r="15" fill="#fff"/>
+  <circle cx="160" cy="120" r="8" fill="#4dc6ff"/>
+  <circle cx="240" cy="120" r="15" fill="#fff"/>
+  <circle cx="240" cy="120" r="8" fill="#4dc6ff"/>
+  
+  <!-- 耳朵 -->
+  <polygon points="150,90 130,50 170,70" fill="#ff9d4d"/>
+  <polygon points="250,90 270,50 230,70" fill="#ff9d4d"/>
+  
+  <!-- 鼻子和嘴 -->
+  <circle cx="200" cy="150" r="8" fill="#ff6b6b"/>
+  <path d="M200,158 Q220,170 240,165" stroke="#333" stroke-width="2" fill="none"/>
+  <path d="M200,158 Q180,170 160,165" stroke="#333" stroke-width="2" fill="none"/>
+  
+  <!-- 胡须 -->
+  <line x1="180" y1="150" x2="140" y2="140" stroke="#333" stroke-width="1"/>
+  <line x1="180" y1="155" x2="140" y2="155" stroke="#333" stroke-width="1"/>
+  <line x1="180" y1="160" x2="140" y2="170" stroke="#333" stroke-width="1"/>
+  <line x1="220" y1="150" x2="260" y2="140" stroke="#333" stroke-width="1"/>
+  <line x1="220" y1="155" x2="260" y2="155" stroke="#333" stroke-width="1"/>
+  <line x1="220" y1="160" x2="260" y2="170" stroke="#333" stroke-width="1"/>
+  
+  <!-- 标题 -->
+  <text x="200" y="50" font-family="Arial" font-size="30" font-weight="bold" text-anchor="middle" fill="#ffcc00" stroke="#ff6600" stroke-width="1">I AM CAT</text>
+  <text x="200" y="250" font-family="Arial" font-size="40" font-weight="bold" text-anchor="middle" fill="#ffcc00" stroke="#ff6600" stroke-width="2">CAT</text>
+</svg>
