@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sci-Fi Roguelike UI Kit</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Share Tech Mono', monospace;
+    background: #060c14;
+    color: #c0dce8;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ============ HEADER ============ */
+  .header {
+    background: linear-gradient(180deg, #0a1628 0%, #060c14 100%);
+    border-bottom: 2px solid #00e5ff20;
+    padding: 32px 40px 28px;
+    text-align: center;
+    position: relative;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #00e5ff, transparent);
+  }
+  .header h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: #00e5ff;
+    letter-spacing: 4px;
+    text-shadow: 0 0 20px #00e5ff40, 0 0 60px #00e5ff20;
+  }
+  .header p {
+    font-size: 13px;
+    color: #4a7a8a;
+    margin-top: 8px;
+    letter-spacing: 2px;
+  }
+
+  /* ============ SECTION ============ */
+  .section {
+    padding: 40px 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .section-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #00e5ff;
+    letter-spacing: 3px;
+    margin-bottom: 24px;
+    padding-left: 16px;
+    border-left: 3px solid #00e5ff;
+    text-shadow: 0 0 10px #00e5ff30;
+  }
+  .section-desc {
+    font-size: 12px;
+    color: #3a6a7a;
+    margin-bottom: 20px;
+    padding-left: 19px;
+  }
+
+  /* ============ GAME FRAME (HUD Preview) ============ */
+  .game-frame {
+    max-width: 1200px;
+    margin: 0 auto 40px;
+    padding: 0 40px;
+  }
+  .game-screen {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #0a1220;
+    border: 2px solid #1a3050;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 40px #00e5ff10, inset 0 0 80px #00000080;
+  }
+  .game-screen img.game-bg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    opacity: 0.15;
+    filter: hue-rotate(170deg) saturate(0.6);
+  }
+  .game-bg-pattern {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background:
+      linear-gradient(60deg, #0d1a2a 25%, transparent 25%),
+      linear-gradient(-60deg, #0d1a2a 25%, transparent 25%),
+      linear-gradient(60deg, transparent 75%, #0d1a2a 75%),
+      linear-gradient(-60deg, transparent 75%, #0d1a2a 75%);
+    background-size: 40px 70px;
+    background-position: 0 0, 0 0, 20px 35px, 20px 35px;
+    opacity: 0.3;
+  }
+
+  /* -- HUD: Status Panel (top-left) -- */
+  .hud-status {
+    position: absolute;
+    top: 16px; left: 16px;
+    background: #0a1428e0;
+    border: 1px solid #00e5ff40;
+    border-radius: 6px;
+    padding: 12px 16px;
+    min-width: 200px;
+    backdrop-filter: blur(8px);
+  }
+  .hud-status .label {
+    font-size: 10px;
+    color: #4a8a9a;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .hud-status .stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 6px 0;
+  }
+  .hud-status .stat-name {
+    font-size: 12px;
+    color: #6abace;
+  }
+  .hud-status .stat-bar-wrap {
+    width: 110px; height: 8px;
+    background: #0a1830;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid #1a3050;
+  }
+  .hud-status .stat-bar {
+    height: 100%;
+    border-radius: 3px;
+  }
+  .bar-shield { background: linear-gradient(90deg, #006080, #00e5ff); width: 100%; }
+  .bar-ammo { background: linear-gradient(90deg, #806000, #ffc800); width: 70%; }
+  .bar-energy { background: linear-gradient(90deg, #006020, #00ff80); width: 55%; }
+  .hud-status .stat-val {
+    font-size: 11px;
+    color: #8ac8e0;
+    margin-left: 6px;
+    min-width: 50px;
+    text-align: right;
+  }
+
+  /* -- HUD: Ability Panel (right) -- */
+  .hud-abilities {
+    position: absolute;
+    top: 50%; right: 16px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .ability-btn {
+    width: 56px; height: 56px;
+    background: #0a1428d0;
+    border: 2px solid #1a4060;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .ability-btn:hover {
+    border-color: #00e5ff;
+    box-shadow: 0 0 12px #00e5ff40;
+    transform: scale(1.08);
+  }
+  .ability-btn img {
+    width: 36px; height: 36px;
+    object-fit: contain;
+  }
+  .ability-btn .key {
+    position: absolute;
+    bottom: 2px; right: 4px;
+    font-size: 9px;
+    color: #4a7a8a;
+    font-family: 'Orbitron', sans-serif;
+  }
+  .ability-btn .cd-overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: #00000080;
+    transition: height 0.3s;
+  }
+  .ability-label {
+    font-size: 9px;
+    color: #4a8a9a;
+    text-align: center;
+    margin-top: 2px;
+    letter-spacing: 0.5px;
+  }
+
+  /* -- HUD: Mini-map (bottom-left) -- */
+  .hud-minimap {
+    position: absolute;
+    bottom: 16px; left: 16px;
+    width: 120px; height: 120px;
+    background: #0a1428e0;
+    border: 1px solid #00e5ff30;
+    border-radius: 8px;
+    overflow: hidden;
+    backdrop-filter: blur(8px);
+  }
+  .hud-minimap img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    opacity: 0.6;
+  }
+  .minimap-label {
+    position: absolute;
+    bottom: 4px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 8px;
+    color: #00e5ff;
+    background: #0a142890;
+    padding: 2px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+    letter-spacing: 1px;
+  }
+
+  /* -- HUD: Resource Bar (top-center) -- */
+  .hud-resources {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    background: #0a1428d0;
+    border: 1px solid #1a3050;
+    border-radius: 8px;
+    padding: 8px 14px;
+    backdrop-filter: blur(8px);
+  }
+  .res-icon {
+    width: 28px; height: 28px;
+    background: #0d1e30;
+    border: 1px solid #1a3050;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .res-icon:hover { border-color: #00e5ff; background: #0d2a40; }
+  .res-icon .dot {
+    width: 10px; height: 10px;
+    border-radius: 2px;
+  }
+  .dot-green { background: #00ff80; box-shadow: 0 0 6px #00ff8060; }
+  .dot-blue { background: #00c8ff; box-shadow: 0 0 6px #00c8ff60; }
+  .dot-orange { background: #ff8000; box-shadow: 0 0 6px #ff800060; }
+  .dot-cyan { background: #00e5ff; box-shadow: 0 0 6px #00e5ff60; }
+
+  /* -- HUD: Room Status (bottom-right) -- */
+  .hud-room-status {
+    position: absolute;
+    bottom: 16px; right: 16px;
+    background: #00ff8015;
+    border: 1px solid #00ff8040;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 11px;
+    color: #00ff80;
+    letter-spacing: 1px;
+  }
+  .hud-room-status.cleared {
+    background: #00ff8010;
+    border-color: #00ff8030;
+    color: #00ff8090;
+  }
+
+  /* -- Characters on field -- */
+  .field-char {
+    position: absolute;
+    transition: transform 0.3s;
+    cursor: pointer;
+    filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.3));
+  }
+  .field-char:hover { transform: scale(1.15); }
+  .field-char img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+  }
+  .char-player { width: 80px; height: 80px; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+  .char-player:hover { transform: translate(-50%, -50%) scale(1.15); }
+  .char-enemy1 { width: 50px; height: 50px; top: 15%; left: 18%; }
+  .char-enemy2 { width: 50px; height: 50px; top: 20%; left: 70%; }
+  .char-enemy3 { width: 50px; height: 50px; top: 65%; left: 25%; }
+
+  /* -- Env objects on field -- */
+  .field-obj {
+    position: absolute;
+    transition: transform 0.3s;
+    cursor: pointer;
+  }
+  .field-obj:hover { transform: scale(1.1); }
+  .field-obj img { width: 100%; height: 100%; object-fit: contain; }
+  .obj-crate1 { width: 40px; height: 40px; top: 35%; left: 35%; }
+  .obj-crate2 { width: 40px; height: 40px; top: 70%; left: 65%; }
+  .obj-terminal { width: 50px; height: 50px; top: 40%; left: 78%; }
+
+  /* ============ ASSET GRID ============ */
+  .asset-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .asset-card {
+    background: #0c1a2a;
+    border: 1px solid #1a3050;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.25s;
+    cursor: pointer;
+  }
+  .asset-card:hover {
+    border-color: #00e5ff60;
+    box-shadow: 0 4px 20px #00e5ff15;
+    transform: translateY(-2px);
+  }
+  .asset-card img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    background: #060e18;
+  }
+  .asset-card .info {
+    padding: 10px 12px;
+  }
+  .asset-card .name {
+    font-size: 11px;
+    color: #00e5ff;
+    letter-spacing: 1px;
+    font-family: 'Orbitron', sans-serif;
+  }
+  .asset-card .desc {
+    font-size: 10px;
+    color: #3a6a7a;
+    margin-top: 3px;
+  }
+
+  /* ============ HUD COMPONENTS SHOWCASE ============ */
+  .hud-showcase {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 768px) {
+    .hud-showcase { grid-template-columns: 1fr; }
+    .section { padding: 24px 16px 10px; }
+    .game-frame { padding: 0 16px; }
+    .header { padding: 20px 16px 16px; }
+    .header h1 { font-size: 18px; }
+  }
+
+  .hud-comp {
+    background: #060e18;
+    border: 1px solid #1a3050;
+    border-radius: 8px;
+    padding: 20px;
+    position: relative;
+  }
+  .hud-comp-label {
+    position: absolute;
+    top: -10px; left: 16px;
+    font-size: 9px;
+    color: #00e5ff;
+    background: #060e18;
+    padding: 2px 10px;
+    letter-spacing: 2px;
+    font-family: 'Orbitron', sans-serif;
+    border: 1px solid #1a3050;
+    border-radius: 3px;
+  }
+
+  /* Component: Health bar */
+  .comp-health {
+    width: 100%;
+  }
+  .comp-health .bar-group { margin-bottom: 10px; }
+  .comp-health .bar-header {
+    display: flex; justify-content: space-between;
+    margin-bottom: 4px;
+  }
+  .comp-health .bar-label { font-size: 11px; color: #6abace; }
+  .comp-health .bar-val { font-size: 11px; color: #8ac8e0; }
+  .comp-health .bar-track {
+    width: 100%; height: 12px;
+    background: #0a1830;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid #1a3050;
+  }
+  .comp-health .bar-fill {
+    height: 100%; border-radius: 5px;
+    transition: width 0.5s ease;
+  }
+
+  /* Component: Ability buttons */
+  .comp-abilities-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .ab-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .ab-icon-wrap {
+    width: 64px; height: 64px;
+    background: #0a1428;
+    border: 2px solid #1a4060;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .ab-icon-wrap:hover {
+    border-color: #00e5ff;
+    box-shadow: 0 0 16px #00e5ff30;
+  }
+  .ab-icon-wrap.active {
+    border-color: #ffc800;
+    box-shadow: 0 0 16px #ffc80040;
+  }
+  .ab-icon-wrap img { width: 40px; height: 40px; object-fit: contain; }
+  .ab-icon-wrap .ab-key {
+    position: absolute;
+    top: 3px; left: 5px;
+    font-size: 9px;
+    color: #4a7a8a;
+    font-family: 'Orbitron', sans-serif;
+  }
+  .ab-name { font-size: 9px; color: #4a8a9a; letter-spacing: 0.5px; }
+
+  /* Component: Minimap */
+  .comp-minimap-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .comp-minimap {
+    width: 140px; height: 140px;
+    background: #0a1428;
+    border: 2px solid #00e5ff30;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+  }
+  .comp-minimap img { width: 100%; height: 100%; object-fit: cover; opacity: 0.5; }
+  .comp-minimap .mm-grid {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background:
+      linear-gradient(#00e5ff08 1px, transparent 1px),
+      linear-gradient(90deg, #00e5ff08 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+  .comp-minimap .mm-dot {
+    position: absolute;
+    width: 6px; height: 6px;
+    background: #00ff80;
+    border-radius: 50%;
+    box-shadow: 0 0 6px #00ff80;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .comp-minimap .mm-enemy-dot {
+    position: absolute;
+    width: 4px; height: 4px;
+    background: #ff4040;
+    border-radius: 50%;
+    box-shadow: 0 0 4px #ff4040;
+  }
+  .mm-enemy-dot:nth-child(1) { top: 30%; left: 25%; }
+  .mm-enemy-dot:nth-child(2) { top: 25%; left: 70%; }
+  .mm-enemy-dot:nth-child(3) { top: 65%; left: 30%; }
+
+  /* Component: Room status */
+  .comp-status-pills {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  .status-pill {
+    padding: 6px 16px;
+    border-radius: 6px;
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+  .pill-cleared {
+    background: #00ff8015;
+    border: 1px solid #00ff8040;
+    color: #00ff80;
+  }
+  .pill-danger {
+    background: #ff404015;
+    border: 1px solid #ff404040;
+    color: #ff6060;
+  }
+  .pill-warning {
+    background: #ffc80015;
+    border: 1px solid #ffc80040;
+    color: #ffc800;
+  }
+  .pill-info {
+    background: #00c8ff15;
+    border: 1px solid #00c8ff40;
+    color: #00c8ff;
+  }
+
+  /* ============ TOOLTIP ============ */
+  .tooltip {
+    position: fixed;
+    background: #0a1428f0;
+    border: 1px solid #00e5ff50;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 11px;
+    color: #8ac8e0;
+    pointer-events: none;
+    z-index: 999;
+    display: none;
+    backdrop-filter: blur(8px);
+    max-width: 200px;
+  }
+
+  /* ============ SCAN LINE EFFECT ============ */
+  .game-screen::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 2px,
+      #00e5ff03 2px,
+      #00e5ff03 4px
+    );
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  /* ============ CORNER DECORATIONS ============ */
+  .corner-decor {
+    position: absolute;
+    width: 20px; height: 20px;
+    border-color: #00e5ff30;
+    border-style: solid;
+    border-width: 0;
+    z-index: 11;
+    pointer-events: none;
+  }
+  .corner-tl { top: 4px; left: 4px; border-top-width: 2px; border-left-width: 2px; border-top-left-radius: 4px; }
+  .corner-tr { top: 4px; right: 4px; border-top-width: 2px; border-right-width: 2px; border-top-right-radius: 4px; }
+  .corner-bl { bottom: 4px; left: 4px; border-bottom-width: 2px; border-left-width: 2px; border-bottom-left-radius: 4px; }
+  .corner-br { bottom: 4px; right: 4px; border-bottom-width: 2px; border-right-width: 2px; border-bottom-right-radius: 4px; }
+</style>
+</head>
+<body>
+
+<div class="tooltip" id="tooltip"></div>
+
+<!-- Header -->
+<div class="header">
+  <h1>SCI-FI ROGUELIKE UI KIT</h1>
+  <p>CHARACTERS // ABILITIES // ENVIRONMENT // HUD COMPONENTS</p>
+</div>
+
+<!-- HUD Preview -->
+<div class="game-frame">
+  <div class="game-screen" id="gameScreen">
+    <div class="game-bg-pattern"></div>
+    <div class="corner-decor corner-tl"></div>
+    <div class="corner-decor corner-tr"></div>
+    <div class="corner-decor corner-bl"></div>
+    <div class="corner-decor corner-br"></div>
+
+    <!-- Status Panel -->
+    <div class="hud-status">
+      <div class="label">UNIT STATUS</div>
+      <div class="stat-row">
+        <span class="stat-name">SHIELD</span>
+        <div class="stat-bar-wrap"><div class="stat-bar bar-shield"></div></div>
+        <span class="stat-val">100/100</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-name">AMMO</span>
+        <div class="stat-bar-wrap"><div class="stat-bar bar-ammo"></div></div>
+        <span class="stat-val">32/45</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-name">ENERGY</span>
+        <div class="stat-bar-wrap"><div class="stat-bar bar-energy"></div></div>
+        <span class="stat-val">39/70</span>
+      </div>
+    </div>
+
+    <!-- Resource Bar -->
+    <div class="hud-resources">
+      <div class="res-icon" title="Crystal"><div class="dot dot-green"></div></div>
+      <div class="res-icon" title="Frost"><div class="dot dot-blue"></div></div>
+      <div class="res-icon" title="Relic"><div class="dot dot-orange"></div></div>
+      <div class="res-icon" title="Core"><div class="dot dot-cyan"></div></div>
+    </div>
+
+    <!-- Ability Panel -->
+    <div class="hud-abilities">
+      <div>
+        <div class="ability-btn" data-tip="Auto Turret [Q]">
+          <img src="icons/ability_auto_turret.jpg" alt="Auto Turret">
+          <span class="key">Q</span>
+        </div>
+        <div class="ability-label">TURRET</div>
+      </div>
+      <div>
+        <div class="ability-btn" data-tip="Lightning Chain [W]">
+          <img src="icons/ability_lightning.jpg" alt="Lightning">
+          <span class="key">W</span>
+        </div>
+        <div class="ability-label">LIGHTNING</div>
+      </div>
+      <div>
+        <div class="ability-btn" data-tip="Thruster Boost [E]">
+          <img src="icons/ability_thruster.jpg" alt="Thruster">
+          <span class="key">E</span>
+        </div>
+        <div class="ability-label">THRUSTER</div>
+      </div>
+      <div>
+        <div class="ability-btn" data-tip="Laser Sight [R]">
+          <img src="icons/ability_laser.jpg" alt="Laser">
+          <span class="key">R</span>
+        </div>
+        <div class="ability-label">LASER</div>
+      </div>
+    </div>
+
+    <!-- Mini-map -->
+    <div class="hud-minimap">
+      <img src="icons/minimap.jpg" alt="Minimap">
+      <div class="minimap-label">AREA A1</div>
+    </div>
+
+    <!-- Room Status -->
+    <div class="hud-room-status">
+      ROOM CLEARED
+    </div>
+
+    <!-- Characters -->
+    <div class="field-char char-player" data-tip="Player Mech - HP: 100/100">
+      <img src="characters/mech_player.jpg" alt="Player Mech">
+    </div>
+    <div class="field-char char-enemy1" data-tip="Blue Sentinel - HP: 45/45">
+      <img src="characters/enemy_blue_robot.jpg" alt="Blue Enemy">
+    </div>
+    <div class="field-char char-enemy2" data-tip="Spike Fiend - HP: 60/60">
+      <img src="characters/enemy_red_spike.jpg" alt="Red Enemy">
+    </div>
+    <div class="field-char char-enemy3" data-tip="Bio Crawler - HP: 35/35">
+      <img src="characters/enemy_green.jpg" alt="Green Enemy">
+    </div>
+
+    <!-- Environment Objects -->
+    <div class="field-obj obj-crate1" data-tip="Loot Crate - Contains random upgrade">
+      <img src="environment/loot_crate.jpg" alt="Crate">
+    </div>
+    <div class="field-obj obj-crate2" data-tip="Loot Crate - Contains ammo">
+      <img src="environment/loot_crate.jpg" alt="Crate">
+    </div>
+    <div class="field-obj obj-terminal" data-tip="Terminal - Accessible">
+      <img src="environment/cyan_terminal.jpg" alt="Terminal">
+    </div>
+  </div>
+</div>
+
+<!-- Characters Section -->
+<div class="section">
+  <div class="section-title">CHARACTERS</div>
+  <div class="section-desc">Player mech and enemy units with transparent backgrounds</div>
+  <div class="asset-grid">
+    <div class="asset-card" data-tip="Player-controlled mech unit">
+      <img src="characters/mech_player.jpg" alt="Mech Player">
+      <div class="info"><div class="name">MECH PLAYER</div><div class="desc">Player unit / 1024x1024</div></div>
+    </div>
+    <div class="asset-card" data-tip="Blue sentinel robot enemy">
+      <img src="characters/enemy_blue_robot.jpg" alt="Blue Robot">
+      <div class="info"><div class="name">BLUE SENTINEL</div><div class="desc">Enemy type A / 1024x1024</div></div>
+    </div>
+    <div class="asset-card" data-tip="Red spiky hostile creature">
+      <img src="characters/enemy_red_spike.jpg" alt="Red Spike">
+      <div class="info"><div class="name">SPIKE FIEND</div><div class="desc">Enemy type B / 1024x1024</div></div>
+    </div>
+    <div class="asset-card" data-tip="Green bio-mechanical enemy">
+      <img src="characters/enemy_green.jpg" alt="Green Enemy">
+      <div class="info"><div class="name">BIO CRAWLER</div><div class="desc">Enemy type C / 1024x1024</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Abilities Section -->
+<div class="section">
+  <div class="section-title">ABILITY ICONS</div>
+  <div class="section-desc">Skill/ability icons for the action bar</div>
+  <div class="asset-grid">
+    <div class="asset-card">
+      <img src="icons/ability_auto_turret.jpg" alt="Turret">
+      <div class="info"><div class="name">AUTO TURRET</div><div class="desc">Deployable turret / Q key</div></div>
+    </div>
+    <div class="asset-card">
+      <img src="icons/ability_lightning.jpg" alt="Lightning">
+      <div class="info"><div class="name">LIGHTNING CHAIN</div><div class="desc">Chain lightning / W key</div></div>
+    </div>
+    <div class="asset-card">
+      <img src="icons/ability_thruster.jpg" alt="Thruster">
+      <div class="info"><div class="name">THRUSTER</div><div class="desc">Speed boost / E key</div></div>
+    </div>
+    <div class="asset-card">
+      <img src="icons/ability_laser.jpg" alt="Laser">
+      <div class="info"><div class="name">LASER SIGHT</div><div class="desc">Precision aim / R key</div></div>
+    </div>
+    <div class="asset-card">
+      <img src="icons/resource_icons.jpg" alt="Resources">
+      <div class="info"><div class="name">RESOURCE ICONS</div><div class="desc">6 resource types set</div></div>
+    </div>
+    <div class="asset-card">
+      <img src="icons/minimap.jpg" alt="Minimap">
+      <div class="info"><div class="name">MINIMAP</div><div class="desc">Radar display element</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Environment Section -->
+<div class="section">
+  <div class="section-title">ENVIRONMENT</div>
+  <div class="section-desc">Tileable floor, interactive objects, and door frames</div>
+  <div class="asset-grid">
+    <div class="asset-card">
+      <img src="environment/hex_platform.jpg" alt="Hex Floor">
+      <div class="info"><div class="name">HEX PLATFORM</div><div class="desc">Floor tile / seamless</div></div>
+    </div>
+    <div class="asset-card">
+      <img src="environment/loot_crate.jpg" alt="Loot Crate">
+      <div class="info"><div class="name">LOOT CRATE</div><div class="desc">Breakable container</div></div>
+    </div>
+    <div class="asset-card">
+      <img src="environment/cyan_terminal.jpg" alt="Terminal">
+      <div class="info"><div class="name">CYAN TERMINAL</div><div class="desc">Interactive console</div></div>
+    </div>
+    <div class="asset-card">
+      <img src="environment/door_frame.jpg" alt="Door Frame">
+      <div class="info"><div class="name">DOOR FRAME</div><div class="desc">Room entrance / exit</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- HUD Components Section -->
+<div class="section">
+  <div class="section-title">HUD COMPONENTS</div>
+  <div class="section-desc">Reusable HUD elements extracted from the game interface</div>
+  <div class="hud-showcase">
+    <!-- Status Bars -->
+    <div class="hud-comp">
+      <span class="hud-comp-label">STATUS BARS</span>
+      <div class="comp-health" style="margin-top:8px">
+        <div class="bar-group">
+          <div class="bar-header"><span class="bar-label">SHIELD</span><span class="bar-val">100 / 100</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:100%;background:linear-gradient(90deg,#006080,#00e5ff)"></div></div>
+        </div>
+        <div class="bar-group">
+          <div class="bar-header"><span class="bar-label">AMMO</span><span class="bar-val">32 / 45</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:71%;background:linear-gradient(90deg,#806000,#ffc800)"></div></div>
+        </div>
+        <div class="bar-group">
+          <div class="bar-header"><span class="bar-label">ENERGY</span><span class="bar-val">39 / 70</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:56%;background:linear-gradient(90deg,#006020,#00ff80)"></div></div>
+        </div>
+        <div class="bar-group">
+          <div class="bar-header"><span class="bar-label">HP</span><span class="bar-val">75 / 100</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:75%;background:linear-gradient(90deg,#800020,#ff4060)"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ability Bar -->
+    <div class="hud-comp">
+      <span class="hud-comp-label">ABILITY BAR</span>
+      <div class="comp-abilities-row" style="margin-top:8px;justify-content:center">
+        <div class="ab-btn">
+          <div class="ab-icon-wrap active"><img src="icons/ability_auto_turret.jpg"><span class="ab-key">Q</span></div>
+          <div class="ab-name">AUTO TURRET</div>
+        </div>
+        <div class="ab-btn">
+          <div class="ab-icon-wrap"><img src="icons/ability_lightning.jpg"><span class="ab-key">W</span></div>
+          <div class="ab-name">LIGHTNING</div>
+        </div>
+        <div class="ab-btn">
+          <div class="ab-icon-wrap"><img src="icons/ability_thruster.jpg"><span class="ab-key">E</span></div>
+          <div class="ab-name">THRUSTER</div>
+        </div>
+        <div class="ab-btn">
+          <div class="ab-icon-wrap"><img src="icons/ability_laser.jpg"><span class="ab-key">R</span></div>
+          <div class="ab-name">LASER SIGHT</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Minimap -->
+    <div class="hud-comp">
+      <span class="hud-comp-label">MINIMAP</span>
+      <div class="comp-minimap-wrap" style="margin-top:8px">
+        <div class="comp-minimap">
+          <img src="icons/minimap.jpg">
+          <div class="mm-grid"></div>
+          <div class="mm-dot"></div>
+          <div class="mm-enemy-dot"></div>
+          <div class="mm-enemy-dot"></div>
+          <div class="mm-enemy-dot"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status Pills -->
+    <div class="hud-comp">
+      <span class="hud-comp-label">STATUS PILLS</span>
+      <div class="comp-status-pills">
+        <div class="status-pill pill-cleared">ROOM CLEARED</div>
+        <div class="status-pill pill-danger">HIGH THREAT</div>
+        <div class="status-pill pill-warning">LOW AMMO</div>
+        <div class="status-pill pill-info">NEW UPGRADE</div>
+      </div>
+      <div class="comp-status-pills" style="margin-top:12px">
+        <div class="status-pill" style="background:#0a1428;border:1px solid #1a4060;color:#6abace">AREA A1</div>
+        <div class="status-pill" style="background:#0a1428;border:1px solid #1a4060;color:#6abace">FLOOR 3</div>
+        <div class="status-pill" style="background:#0a1428;border:1px solid #1a4060;color:#6abace">WAVE 5/10</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Tooltip system
+const tooltip = document.getElementById('tooltip');
+document.querySelectorAll('[data-tip]').forEach(el => {
+  el.addEventListener('mouseenter', e => {
+    tooltip.textContent = el.dataset.tip;
+    tooltip.style.display = 'block';
+  });
+  el.addEventListener('mousemove', e => {
+    tooltip.style.left = (e.clientX + 12) + 'px';
+    tooltip.style.top = (e.clientY - 8) + 'px';
+  });
+  el.addEventListener('mouseleave', () => {
+    tooltip.style.display = 'none';
+  });
+});
+</script>
+</body>
+</html>

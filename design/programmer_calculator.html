@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programmer Base Calculator</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Cascadia Code', 'Fira Code', 'JetBrains Mono', 'Consolas', monospace;
+    background: #0d1117;
+    color: #c9d1d9;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  .app {
+    width: 100%;
+    max-width: 680px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    color: #58a6ff;
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+  }
+  .card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .card-title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #8b949e;
+    letter-spacing: 1.5px;
+    margin-bottom: 14px;
+  }
+  .input-row {
+    display: flex;
+    gap: 10px;
+    align-items: stretch;
+  }
+  .base-select {
+    background: #0d1117;
+    color: #58a6ff;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 0 14px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    min-width: 90px;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2358a6ff'%3E%3Cpath d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+  }
+  .base-select:focus { border-color: #58a6ff; }
+  .number-input {
+    flex: 1;
+    background: #0d1117;
+    color: #e6edf3;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-family: inherit;
+    font-size: 18px;
+    outline: none;
+    letter-spacing: 1px;
+  }
+  .number-input:focus { border-color: #58a6ff; }
+  .number-input.error { border-color: #f85149; color: #f85149; }
+  .error-msg {
+    color: #f85149;
+    font-size: 12px;
+    margin-top: 6px;
+    min-height: 18px;
+  }
+
+  /* Arithmetic */
+  .expr-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 14px;
+  }
+  .op-select {
+    background: #0d1117;
+    color: #ffa657;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    outline: none;
+    min-width: 56px;
+    text-align: center;
+  }
+  .op-select:focus { border-color: #ffa657; }
+  .op-input {
+    flex: 1;
+    background: #0d1117;
+    color: #e6edf3;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-family: inherit;
+    font-size: 16px;
+    outline: none;
+  }
+  .op-input:focus { border-color: #ffa657; }
+
+  /* Result row */
+  .result-row {
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: #0d1117;
+    border: 1px solid #238636;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .result-label { color: #8b949e; font-size: 13px; }
+  .result-value { color: #7ee787; font-size: 20px; font-weight: 700; letter-spacing: 1px; word-break: break-all; }
+
+  /* Conversion table */
+  .conv-table { width: 100%; border-collapse: collapse; }
+  .conv-table tr { border-bottom: 1px solid #21262d; }
+  .conv-table tr:last-child { border-bottom: none; }
+  .conv-table td { padding: 14px 0; vertical-align: top; }
+  .conv-base {
+    font-size: 13px;
+    font-weight: 600;
+    color: #8b949e;
+    width: 90px;
+    white-space: nowrap;
+  }
+  .conv-value {
+    font-size: 16px;
+    color: #e6edf3;
+    word-break: break-all;
+    line-height: 1.5;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background 0.15s;
+  }
+  .conv-value:hover { background: #1c2128; }
+  .conv-value.copied { background: #238636; color: #fff; }
+
+  /* Base buttons */
+  .base-tabs {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .base-tab {
+    background: #0d1117;
+    color: #8b949e;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.15s;
+  }
+  .base-tab:hover { color: #c9d1d9; border-color: #484f58; }
+  .base-tab.active { color: #58a6ff; border-color: #58a6ff; background: #0d111780; }
+
+  /* History */
+  .history-list {
+    max-height: 200px;
+    overflow-y: auto;
+    font-size: 13px;
+    color: #8b949e;
+  }
+  .history-list::-webkit-scrollbar { width: 4px; }
+  .history-list::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
+  .history-item {
+    padding: 8px 0;
+    border-bottom: 1px solid #21262d;
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+  .history-item:hover { color: #c9d1d9; }
+  .history-item:last-child { border-bottom: none; }
+  .history-empty { color: #484f58; font-style: italic; padding: 12px 0; }
+  .clear-btn {
+    background: none;
+    border: 1px solid #30363d;
+    color: #8b949e;
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-family: inherit;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .clear-btn:hover { color: #f85149; border-color: #f85149; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <h1>BASE CALC</h1>
+
+  <!-- Input Card -->
+  <div class="card">
+    <div class="card-title">Input</div>
+    <div class="input-row">
+      <select class="base-select" id="inputBase">
+        <option value="2">BIN 2</option>
+        <option value="8" selected>OCT 8</option>
+        <option value="10">DEC 10</option>
+        <option value="16">HEX 16</option>
+        <option value="32">B32</option>
+        <option value="64">B64</option>
+      </select>
+      <input type="text" class="number-input" id="inputValue" placeholder="Enter number..." autofocus>
+    </div>
+    <div class="error-msg" id="errorMsg"></div>
+    <div class="expr-row">
+      <select class="op-select" id="operator">
+        <option value="+">+</option>
+        <option value="-">&minus;</option>
+        <option value="*">&times;</option>
+        <option value="/">&divide;</option>
+      </select>
+      <input type="text" class="op-input" id="secondValue" placeholder="Second operand (optional)">
+      <select class="base-select" id="secondBase" style="min-width:70px">
+        <option value="2">2</option>
+        <option value="8" selected>8</option>
+        <option value="10">10</option>
+        <option value="16">16</option>
+        <option value="32">32</option>
+        <option value="64">64</option>
+      </select>
+    </div>
+    <div class="result-row" id="resultRow" style="display:none">
+      <span class="result-label">RESULT</span>
+      <span class="result-value" id="resultValue"></span>
+    </div>
+  </div>
+
+  <!-- Conversion Card -->
+  <div class="card">
+    <div class="card-title">Conversions (click to copy)</div>
+    <table class="conv-table" id="convTable">
+      <tr><td colspan="2" style="color:#484f58">Enter a number to see conversions</td></tr>
+    </table>
+  </div>
+
+  <!-- History Card -->
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div class="card-title" style="margin:0">History</div>
+      <button class="clear-btn" id="clearHistory">CLEAR</button>
+    </div>
+    <div class="history-list" id="historyList">
+      <div class="history-empty">No calculations yet</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const DIGITS_32 = '0123456789ABCDEFGHIJKLMNOPQRSTUV';
+const DIGITS_64 = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+/';
+
+function parseBaseN(str, base) {
+  str = str.trim();
+  if (!str) return null;
+  if (base <= 36) return parseInt(str, base);
+  // base 64
+  let val = 0n;
+  for (const ch of str) {
+    const idx = DIGITS_64.indexOf(ch);
+    if (idx === -1 || idx >= base) return NaN;
+    val = val * BigInt(base) + BigInt(idx);
+  }
+  return Number(val);
+}
+
+function toBaseN(num, base) {
+  if (!Number.isFinite(num) || isNaN(num)) return 'NaN';
+  const isNeg = num < 0;
+  let big = BigInt(Math.floor(Math.abs(num)));
+  if (base <= 36) {
+    return (isNeg ? '-' : '') + Math.abs(num).toString(base).toUpperCase();
+  }
+  // base 64
+  if (big === 0n) return '0';
+  let result = '';
+  const b = BigInt(base);
+  while (big > 0n) {
+    result = DIGITS_64[Number(big % b)] + result;
+    big /= b;
+  }
+  return (isNeg ? '-' : '') + result;
+}
+
+function formatBinary(str) {
+  if (str.startsWith('-')) return '-' + formatBinary(str.slice(1));
+  return str.replace(/(.{4})/g, '$1 ').trim();
+}
+
+function doCalculate() {
+  const inputBase = parseInt(document.getElementById('inputBase').value);
+  const inputVal = document.getElementById('inputValue').value.trim();
+  const op = document.getElementById('operator').value;
+  const secondVal = document.getElementById('secondValue').value.trim();
+  const secondBase = parseInt(document.getElementById('secondBase').value);
+  const errorMsg = document.getElementById('errorMsg');
+  const resultRow = document.getElementById('resultRow');
+  const resultValue = document.getElementById('resultValue');
+  const convTable = document.getElementById('convTable');
+
+  errorMsg.textContent = '';
+
+  if (!inputVal) {
+    resultRow.style.display = 'none';
+    convTable.innerHTML = '<tr><td colspan="2" style="color:#484f58">Enter a number to see conversions</td></tr>';
+    return;
+  }
+
+  // Validate input chars
+  const digitSet = inputBase <= 36
+    ? '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.slice(0, inputBase)
+    : DIGITS_64;
+  for (const ch of inputVal.toUpperCase()) {
+    if (ch === '-' && inputVal.indexOf(ch) === 0) continue;
+    if (!digitSet.includes(ch)) {
+      errorMsg.textContent = `Invalid character '${ch}' for base ${inputBase}`;
+      document.getElementById('inputValue').classList.add('error');
+      resultRow.style.display = 'none';
+      return;
+    }
+  }
+  document.getElementById('inputValue').classList.remove('error');
+
+  let num = parseBaseN(inputVal, inputBase);
+  if (num === null || isNaN(num)) {
+    errorMsg.textContent = 'Invalid number';
+    return;
+  }
+
+  // Arithmetic
+  let finalNum = num;
+  let expr = inputVal;
+  if (secondVal) {
+    const sDigitSet = secondBase <= 36
+      ? '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.slice(0, secondBase)
+      : DIGITS_64;
+    for (const ch of secondVal.toUpperCase()) {
+      if (ch === '-' && secondVal.indexOf(ch) === 0) continue;
+      if (!sDigitSet.includes(ch)) {
+        errorMsg.textContent = `Invalid character '${ch}' in second operand for base ${secondBase}`;
+        return;
+      }
+    }
+    const num2 = parseBaseN(secondVal, secondBase);
+    if (num2 === null || isNaN(num2)) {
+      errorMsg.textContent = 'Invalid second operand';
+      return;
+    }
+    const opSymbol = { '+': '+', '-': '-', '*': '×', '/': '÷' }[op];
+    expr = `${inputVal} ${opSymbol} ${secondVal}`;
+    switch (op) {
+      case '+': finalNum = num + num2; break;
+      case '-': finalNum = num - num2; break;
+      case '*': finalNum = num * num2; break;
+      case '/':
+        if (num2 === 0) {
+          errorMsg.textContent = 'Division by zero';
+          resultRow.style.display = 'none';
+          return;
+        }
+        finalNum = Math.trunc(num / num2);
+        break;
+    }
+  }
+
+  // Show result
+  if (secondVal) {
+    resultRow.style.display = 'flex';
+    resultValue.textContent = toBaseN(finalNum, inputBase) || '0';
+  } else {
+    resultRow.style.display = 'none';
+  }
+
+  // Conversions
+  const bases = [
+    { name: 'BIN', base: 2, key: 'binary' },
+    { name: 'OCT', base: 8, key: 'octal' },
+    { name: 'DEC', base: 10, key: 'decimal' },
+    { name: 'HEX', base: 16, key: 'hex' },
+    { name: 'BASE32', base: 32, key: 'base32' },
+    { name: 'BASE64', base: 64, key: 'base64' },
+  ];
+  let html = '';
+  for (const b of bases) {
+    let val = toBaseN(finalNum, b.base);
+    if (b.base === 2) val = formatBinary(val);
+    if (b.base === 16) val = '0x' + val;
+    if (b.base === 8) val = '0o' + val;
+    if (b.base === 10) val = Number.isFinite(finalNum) ? finalNum.toLocaleString('en-US') : 'NaN';
+    html += `<tr>
+      <td class="conv-base">${b.name}</td>
+      <td class="conv-value" data-copy="${toBaseN(finalNum, b.base)}" title="Click to copy">${val}</td>
+    </tr>`;
+  }
+  convTable.innerHTML = html;
+
+  // Attach copy handlers
+  convTable.querySelectorAll('.conv-value').forEach(el => {
+    el.onclick = () => {
+      const text = el.dataset.copy;
+      navigator.clipboard.writeText(text).then(() => {
+        el.classList.add('copied');
+        setTimeout(() => el.classList.remove('copied'), 600);
+      });
+    };
+  });
+
+  // Add to history
+  if (secondVal) {
+    addHistory(expr, finalNum, inputBase);
+  }
+}
+
+const history = [];
+function addHistory(expr, result, base) {
+  history.unshift({ expr, result: toBaseN(result, base), base });
+  if (history.length > 50) history.pop();
+  renderHistory();
+}
+
+function renderHistory() {
+  const list = document.getElementById('historyList');
+  if (history.length === 0) {
+    list.innerHTML = '<div class="history-empty">No calculations yet</div>';
+    return;
+  }
+  list.innerHTML = history.map((h, i) =>
+    `<div class="history-item" data-idx="${i}">${h.expr} = ${h.result} (base${h.base})</div>`
+  ).join('');
+  list.querySelectorAll('.history-item').forEach(el => {
+    el.onclick = () => {
+      const item = history[parseInt(el.dataset.idx)];
+      document.getElementById('inputValue').value = item.result;
+      document.getElementById('inputBase').value = item.base;
+      doCalculate();
+    };
+  });
+}
+
+document.getElementById('clearHistory').onclick = () => {
+  history.length = 0;
+  renderHistory();
+};
+
+// Live update
+['inputValue', 'secondValue'].forEach(id => {
+  document.getElementById(id).addEventListener('input', doCalculate);
+});
+['inputBase', 'operator', 'secondBase'].forEach(id => {
+  document.getElementById(id).addEventListener('change', doCalculate);
+});
+
+doCalculate();
+</script>
+</body>
+</html>

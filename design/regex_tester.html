@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Regex Tester</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #0b0f19;
+    color: #c0dce8;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  h1 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    font-weight: 700;
+    color: #818cf8;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+  }
+
+  /* Input area */
+  .input-section {
+    background: #111827;
+    border: 1px solid #2a3548;
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 16px;
+  }
+  .input-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #5a6a7a;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .regex-input-wrap {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .regex-input {
+    flex: 1;
+    background: #0a0e17;
+    border: 1px solid #2a3548;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    color: #e8edf5;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .regex-input:focus { border-color: #6366f1; }
+  .regex-input.error { border-color: #ef4444; }
+
+  .flags {
+    display: flex;
+    gap: 6px;
+  }
+  .flag-btn {
+    width: 36px; height: 36px;
+    background: #0a0e17;
+    border: 1px solid #2a3548;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    color: #5a6a7a;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .flag-btn:hover { border-color: #374357; color: #8899aa; }
+  .flag-btn.active { background: rgba(99,102,241,0.15); border-color: #6366f1; color: #818cf8; }
+
+  .test-string {
+    width: 100%;
+    min-height: 120px;
+    background: #0a0e17;
+    border: 1px solid #2a3548;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: #e8edf5;
+    outline: none;
+    resize: vertical;
+    line-height: 1.6;
+    transition: border-color 0.2s;
+  }
+  .test-string:focus { border-color: #6366f1; }
+
+  /* Stats bar */
+  .stats-bar {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .stat-chip {
+    background: #111827;
+    border: 1px solid #2a3548;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .stat-key { color: #5a6a7a; }
+  .stat-val { color: #818cf8; font-weight: 600; }
+  .stat-val.error { color: #ef4444; }
+  .stat-val.success { color: #22c55e; }
+
+  /* Result area */
+  .result-section {
+    background: #111827;
+    border: 1px solid #2a3548;
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 16px;
+  }
+  .result-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #5a6a7a;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+
+  .highlight-result {
+    background: #0a0e17;
+    border: 1px solid #2a3548;
+    border-radius: 8px;
+    padding: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    line-height: 1.8;
+    min-height: 60px;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+  .highlight-result mark {
+    background: rgba(99,102,241,0.3);
+    color: #c7d2fe;
+    border-radius: 3px;
+    padding: 1px 0;
+    border-bottom: 2px solid #6366f1;
+  }
+  .highlight-result .group-1 mark { background: rgba(234,179,8,0.25); border-bottom-color: #eab308; color: #fef08a; }
+  .highlight-result .group-2 mark { background: rgba(34,197,94,0.25); border-bottom-color: #22c55e; color: #bbf7d0; }
+  .highlight-result .group-3 mark { background: rgba(6,182,212,0.25); border-bottom-color: #06b6d4; color: #a5f3fc; }
+  .highlight-result .group-4 mark { background: rgba(236,72,153,0.25); border-bottom-color: #ec4899; color: #fbcfe8; }
+
+  .no-match { color: #5a6a7a; font-style: italic; }
+
+  /* Match list */
+  .match-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  .match-list::-webkit-scrollbar { width: 4px; }
+  .match-list::-webkit-scrollbar-thumb { background: #2a3548; border-radius: 4px; }
+
+  .match-item {
+    display: flex;
+    gap: 10px;
+    padding: 6px 10px;
+    background: #0a0e17;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    align-items: flex-start;
+  }
+  .match-idx {
+    color: #5a6a7a;
+    min-width: 20px;
+    text-align: right;
+    padding-top: 1px;
+  }
+  .match-val {
+    color: #818cf8;
+    word-break: break-all;
+  }
+  .match-pos {
+    color: #374357;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  /* Groups table */
+  .groups-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .groups-table th {
+    text-align: left;
+    padding: 8px 10px;
+    color: #5a6a7a;
+    font-weight: 600;
+    border-bottom: 1px solid #2a3548;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .groups-table td {
+    padding: 6px 10px;
+    border-bottom: 1px solid #1a2332;
+    color: #8899aa;
+  }
+  .groups-table .grp-name { color: #6366f1; }
+  .groups-table .grp-val { color: #c7d2fe; word-break: break-all; }
+
+  /* Cheat sheet */
+  .cheat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 8px;
+  }
+  .cheat-item {
+    background: #0a0e17;
+    border: 1px solid #1a2332;
+    border-radius: 6px;
+    padding: 8px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .cheat-item:hover { border-color: #6366f1; background: rgba(99,102,241,0.05); }
+  .cheat-char { color: #818cf8; font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 13px; }
+  .cheat-desc { color: #5a6a7a; font-size: 11px; }
+
+  /* Common patterns */
+  .patterns-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .pattern-chip {
+    background: #0a0e17;
+    border: 1px solid #2a3548;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #8899aa;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .pattern-chip:hover { border-color: #6366f1; color: #c7d2fe; }
+
+  /* Error message */
+  .error-msg {
+    color: #ef4444;
+    font-size: 12px;
+    margin-top: 6px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>REGEX TESTER</h1>
+
+  <!-- Regex input -->
+  <div class="input-section">
+    <div class="input-label">Regular Expression</div>
+    <div class="regex-input-wrap">
+      <span style="color:#5a6a7a;font-family:'JetBrains Mono',monospace;font-size:16px">/</span>
+      <input type="text" class="regex-input" id="regexInput" placeholder="Enter regex pattern...">
+      <span style="color:#5a6a7a;font-family:'JetBrains Mono',monospace;font-size:16px">/</span>
+      <div class="flags">
+        <button class="flag-btn active" data-flag="g" title="Global">g</button>
+        <button class="flag-btn" data-flag="i" title="Case insensitive">i</button>
+        <button class="flag-btn" data-flag="m" title="Multiline">m</button>
+        <button class="flag-btn" data-flag="s" title="DotAll">s</button>
+      </div>
+    </div>
+    <div class="error-msg" id="regexError"></div>
+  </div>
+
+  <!-- Test string -->
+  <div class="input-section">
+    <div class="input-label">Test String</div>
+    <textarea class="test-string" id="testString" placeholder="Enter text to test against...">Hello World 2025! Email: test@example.com and admin@company.org.
+Phone: 138-1234-5678, 021-8765-4321.
+IP: 192.168.1.100, 10.0.0.255.
+Date: 2025-01-15, 2024/12/31.
+Hex: 0xFF00AB, #1a2b3c.
+URL: https://www.example.com/path?q=1</textarea>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat-chip">
+      <span class="stat-key">Matches</span>
+      <span class="stat-val" id="matchCount">0</span>
+    </div>
+    <div class="stat-chip">
+      <span class="stat-key">Groups</span>
+      <span class="stat-val" id="groupCount">0</span>
+    </div>
+    <div class="stat-chip">
+      <span class="stat-key">Pattern</span>
+      <span class="stat-val" id="patternDisplay" style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">-</span>
+    </div>
+    <div class="stat-chip" id="validChip">
+      <span class="stat-key">Valid</span>
+      <span class="stat-val" id="validStatus">-</span>
+    </div>
+  </div>
+
+  <!-- Highlighted result -->
+  <div class="result-section">
+    <div class="result-label">Highlighted Matches</div>
+    <div class="highlight-result" id="highlightResult">
+      <span class="no-match">Enter a regex pattern to see matches highlighted here.</span>
+    </div>
+  </div>
+
+  <!-- Match list -->
+  <div class="result-section">
+    <div class="result-label">Match Details</div>
+    <div class="match-list" id="matchList">
+      <span class="no-match" style="color:#5a6a7a;font-style:italic;padding:8px 0">No matches yet</span>
+    </div>
+  </div>
+
+  <!-- Groups table -->
+  <div class="result-section" id="groupsSection" style="display:none">
+    <div class="result-label">Captured Groups</div>
+    <div style="overflow-x:auto">
+      <table class="groups-table" id="groupsTable"></table>
+    </div>
+  </div>
+
+  <!-- Common patterns -->
+  <div class="result-section">
+    <div class="result-label">Common Patterns</div>
+    <div class="patterns-row" id="patternsRow">
+      <div class="pattern-chip" data-regex="\\b[\\w.+-]+@[\\w-]+\\.[\\w.]+\\b" data-label="Email">Email</div>
+      <div class="pattern-chip" data-regex="\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b" data-label="IPv4">IPv4</div>
+      <div class="pattern-chip" data-regex="https?://[\\S]+" data-label="URL">URL</div>
+      <div class="pattern-chip" data-regex="\\d{4}[/-]\\d{2}[/-]\\d{2}" data-label="Date YYYY-MM-DD">Date</div>
+      <div class="pattern-chip" data-regex="\\b\\d{3}[-.]?\\d{4}[-.]?\\d{4}\\b" data-label="Phone (CN)">Phone CN</div>
+      <div class="pattern-chip" data-regex="0x[0-9a-fA-F]+|#[0-9a-fA-F]{6}" data-label="Hex / Color">Hex/Color</div>
+      <div class="pattern-chip" data-regex="\\b[A-Z][a-z]+(?:\\s[A-Z][a-z]+)*\\b" data-label="PascalCase">PascalCase</div>
+      <div class="pattern-chip" data-regex="\\b\\d+\\.?\\d*\\b" data-label="Numbers">Numbers</div>
+    </div>
+  </div>
+
+  <!-- Cheat sheet -->
+  <div class="result-section">
+    <div class="result-label">Quick Reference</div>
+    <div class="cheat-grid">
+      <div class="cheat-item" data-regex="."><span class="cheat-char">.</span><span class="cheat-desc">Any char</span></div>
+      <div class="cheat-item" data-regex="\\d"><span class="cheat-char">\\d</span><span class="cheat-desc">Digit [0-9]</span></div>
+      <div class="cheat-item" data-regex="\\w"><span class="cheat-char">\\w</span><span class="cheat-desc">Word [a-zA-Z0-9_]</span></div>
+      <div class="cheat-item" data-regex="\\s"><span class="cheat-char">\\s</span><span class="cheat-desc">Whitespace</span></div>
+      <div class="cheat-item" data-regex="^"><span class="cheat-char">^</span><span class="cheat-desc">Start of line</span></div>
+      <div class="cheat-item" data-regex="$"><span class="cheat-char">$</span><span class="cheat-desc">End of line</span></div>
+      <div class="cheat-item" data-regex="*"><span class="cheat-char">*</span><span class="cheat-desc">0 or more</span></div>
+      <div class="cheat-item" data-regex="+"><span class="cheat-char">+</span><span class="cheat-desc">1 or more</span></div>
+      <div class="cheat-item" data-regex="?"><span class="cheat-char">?</span><span class="cheat-desc">0 or 1</span></div>
+      <div class="cheat-item" data-regex="{n,m}"><span class="cheat-char">{n,m}</span><span class="cheat-desc">n to m times</span></div>
+      <div class="cheat-item" data-regex="[abc]"><span class="cheat-char">[abc]</span><span class="cheat-desc">Char class</span></div>
+      <div class="cheat-item" data-regex="(group)"><span class="cheat-char">( )</span><span class="cheat-desc">Capture group</span></div>
+      <div class="cheat-item" data-regex="(?:group)"><span class="cheat-char">(?: )</span><span class="cheat-desc">Non-capture</span></div>
+      <div class="cheat-item" data-regex="(?=x)"><span class="cheat-char">(?= )</span><span class="cheat-desc">Lookahead</span></div>
+      <div class="cheat-item" data-regex="|"><span class="cheat-char">|</span><span class="cheat-desc">OR alternation</span></div>
+      <div class="cheat-item" data-regex="\\b"><span class="cheat-char">\\b</span><span class="cheat-desc">Word boundary</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const regexInput = document.getElementById('regexInput');
+const testString = document.getElementById('testString');
+const highlightResult = document.getElementById('highlightResult');
+const matchList = document.getElementById('matchList');
+const matchCount = document.getElementById('matchCount');
+const groupCount = document.getElementById('groupCount');
+const patternDisplay = document.getElementById('patternDisplay');
+const validStatus = document.getElementById('validStatus');
+const regexError = document.getElementById('regexError');
+const groupsSection = document.getElementById('groupsSection');
+const groupsTable = document.getElementById('groupsTable');
+
+let activeFlags = new Set(['g']);
+
+// Flag buttons
+document.querySelectorAll('.flag-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const flag = btn.dataset.flag;
+    if (activeFlags.has(flag)) { activeFlags.delete(flag); btn.classList.remove('active'); }
+    else { activeFlags.add(flag); btn.classList.add('active'); }
+    runTest();
+  });
+});
+
+// Common patterns
+document.querySelectorAll('.pattern-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    regexInput.value = chip.dataset.regex;
+    runTest();
+  });
+});
+
+// Cheat sheet
+document.querySelectorAll('.cheat-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const val = item.dataset.regex;
+    regexInput.value = regexInput.value ? regexInput.value + val : val;
+    regexInput.focus();
+    runTest();
+  });
+});
+
+// Live test
+regexInput.addEventListener('input', runTest);
+testString.addEventListener('input', runTest);
+
+function runTest() {
+  const pattern = regexInput.value;
+  const text = testString.value;
+
+  regexError.textContent = '';
+  regexInput.classList.remove('error');
+
+  if (!pattern) {
+    highlightResult.innerHTML = '<span class="no-match">Enter a regex pattern to see matches highlighted here.</span>';
+    matchList.innerHTML = '<span class="no-match" style="color:#5a6a7a;font-style:italic;padding:8px 0">No matches yet</span>';
+    matchCount.textContent = '0';
+    groupCount.textContent = '0';
+    patternDisplay.textContent = '-';
+    validStatus.textContent = '-';
+    validStatus.className = 'stat-val';
+    groupsSection.style.display = 'none';
+    return;
+  }
+
+  const flags = [...activeFlags].join('');
+  patternDisplay.textContent = `/${pattern}/${flags}`;
+
+  let regex;
+  try {
+    regex = new RegExp(pattern, flags);
+    validStatus.textContent = 'Yes';
+    validStatus.className = 'stat-val success';
+  } catch (e) {
+    regexError.textContent = e.message;
+    regexInput.classList.add('error');
+    validStatus.textContent = 'No';
+    validStatus.className = 'stat-val error';
+    highlightResult.innerHTML = '<span class="no-match">Invalid regex pattern</span>';
+    matchList.innerHTML = '';
+    matchCount.textContent = '0';
+    groupCount.textContent = '0';
+    groupsSection.style.display = 'none';
+    return;
+  }
+
+  // Collect matches
+  const matches = [];
+  let m;
+  if (flags.includes('g')) {
+    while ((m = regex.exec(text)) !== null) {
+      matches.push({ value: m[0], index: m.index, groups: [...m] });
+      if (m[0].length === 0) { regex.lastIndex++; }
+    }
+  } else {
+    m = regex.exec(text);
+    if (m) matches.push({ value: m[0], index: m.index, groups: [...m] });
+  }
+
+  // Stats
+  matchCount.textContent = matches.length;
+  const numGroups = matches.length > 0 ? matches[0].groups.length - 1 : 0;
+  groupCount.textContent = numGroups;
+
+  // Highlight
+  if (matches.length === 0) {
+    highlightResult.innerHTML = escapeHtml(text);
+    matchList.innerHTML = '<span class="no-match" style="color:#5a6a7a;font-style:italic;padding:8px 0">No matches found</span>';
+    groupsSection.style.display = 'none';
+    return;
+  }
+
+  // Build highlighted HTML
+  let html = '';
+  let lastIdx = 0;
+  matches.forEach((match, mi) => {
+    // Text before match
+    html += escapeHtml(text.slice(lastIdx, match.index));
+
+    // The match itself
+    if (match.groups.length > 1) {
+      // Try to highlight individual groups
+      const fullHtml = `<mark>${escapeHtml(match.value)}</mark>`;
+      html += fullHtml;
+    } else {
+      html += `<mark>${escapeHtml(match.value)}</mark>`;
+    }
+    lastIdx = match.index + match.value.length;
+  });
+  html += escapeHtml(text.slice(lastIdx));
+  highlightResult.innerHTML = html;
+
+  // Match list
+  matchList.innerHTML = matches.map((match, i) => `
+    <div class="match-item">
+      <span class="match-idx">#${i + 1}</span>
+      <span class="match-val">${escapeHtml(match.value)}</span>
+      <span class="match-pos">[${match.index}:${match.index + match.value.length}]</span>
+    </div>
+  `).join('');
+
+  // Groups table
+  if (numGroups > 0) {
+    groupsSection.style.display = 'block';
+    let tableHtml = '<thead><tr><th>Match #</th><th>Full Match</th>';
+    for (let g = 1; g <= numGroups; g++) {
+      tableHtml += `<th>Group ${g}</th>`;
+    }
+    tableHtml += '</tr></thead><tbody>';
+
+    matches.forEach((match, i) => {
+      tableHtml += `<tr><td class="grp-name">#${i + 1}</td><td>${escapeHtml(match.groups[0] || '')}</td>`;
+      for (let g = 1; g <= numGroups; g++) {
+        tableHtml += `<td class="grp-val">${match.groups[g] !== undefined ? escapeHtml(match.groups[g]) : '<span style="color:#374357">undefined</span>'}</td>`;
+      }
+      tableHtml += '</tr>';
+    });
+    tableHtml += '</tbody>';
+    groupsTable.innerHTML = tableHtml;
+  } else {
+    groupsSection.style.display = 'none';
+  }
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// Initial run
+runTest();
+</script>
+</body>
+</html>
