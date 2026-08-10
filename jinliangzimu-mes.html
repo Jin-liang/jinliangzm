@@ -1,0 +1,1732 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>金亮子木MES系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #1e40af;
+            --primary-light: #3b82f6;
+            --secondary-color: #64748b;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --shadow: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .app-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary-color));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .logo-text h1 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+
+        .nav-section {
+            margin-bottom: 24px;
+        }
+
+        .nav-section-title {
+            padding: 0 20px;
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #64748b;
+            margin-bottom: 8px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+            color: #cbd5e1;
+        }
+
+        .nav-item:hover {
+            background: rgba(255,255,255,0.05);
+            color: white;
+        }
+
+        .nav-item.active {
+            background: rgba(59, 130, 246, 0.1);
+            border-left-color: var(--primary-light);
+            color: white;
+        }
+
+        .nav-icon {
+            font-size: 18px;
+            width: 20px;
+        }
+
+        .nav-text {
+            font-size: 14px;
+            flex: 1;
+        }
+
+        .nav-badge {
+            background: var(--danger-color);
+            color: white;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .top-bar {
+            background: var(--card-bg);
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+            z-index: 10;
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .notification-btn {
+            position: relative;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px;
+            color: var(--text-secondary);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 8px;
+            height: 8px;
+            background: var(--danger-color);
+            border-radius: 50%;
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 32px;
+            overflow-y: auto;
+        }
+
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        /* 电子看板样式 */
+        .dashboard-board {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-board::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .dashboard-title {
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .dashboard-title::before {
+            content: '';
+            width: 4px;
+            height: 28px;
+            background: linear-gradient(180deg, var(--primary-light), var(--success-color));
+            border-radius: 2px;
+        }
+
+        .dashboard-time {
+            font-size: 18px;
+            color: #94a3b8;
+            font-family: 'Courier New', monospace;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .kpi-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .kpi-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-4px);
+        }
+
+        .kpi-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .kpi-value {
+            font-size: 42px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #60a5fa, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .kpi-label {
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        .kpi-trend {
+            font-size: 12px;
+            margin-top: 8px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .kpi-trend.up {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+        }
+
+        .kpi-trend.down {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+        }
+
+        .board-charts {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .chart-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .chart-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #e2e8f0;
+        }
+
+        .chart-content {
+            height: 180px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            padding: 20px 0;
+        }
+
+        .chart-bar {
+            width: 40px;
+            background: linear-gradient(180deg, var(--primary-light), var(--success-color));
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .chart-bar:hover {
+            opacity: 0.8;
+        }
+
+        .chart-bar-label {
+            position: absolute;
+            bottom: -24px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            color: #94a3b8;
+            white-space: nowrap;
+        }
+
+        .alert-list {
+            margin-top: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .alert-item {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .alert-icon {
+            font-size: 20px;
+        }
+
+        .alert-text {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .alert-time {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        /* 卡片 */
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* 按钮 */
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-light);
+        }
+
+        .btn-secondary {
+            background: var(--bg-color);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+
+        /* 表格 */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: var(--bg-color);
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+        tbody tr:hover {
+            background: var(--bg-color);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-badge.success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-badge.warning {
+            background: #fed7aa;
+            color: #92400e;
+        }
+
+        .status-badge.danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-badge.info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        /* 模态框 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--card-bg);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary-light);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .search-box {
+            position: relative;
+            max-width: 300px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 14px 10px 40px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .search-box::before {
+            content: "🔍";
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .toolbar-left {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .toolbar-right {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-light);
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 8px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        /* 确认对话框 */
+        .confirm-dialog {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .confirm-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .confirm-text {
+            font-size: 16px;
+            margin-bottom: 24px;
+            color: var(--text-primary);
+        }
+
+        .confirm-btns {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 60px;
+            }
+
+            .logo-text, .nav-text, .nav-section-title, .nav-badge {
+                display: none;
+            }
+
+            .nav-item {
+                justify-content: center;
+                padding: 16px;
+            }
+
+            .content-area {
+                padding: 16px;
+            }
+
+            .kpi-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .board-charts {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">金</div>
+                    <div class="logo-text">
+                        <h1>金亮子木</h1>
+                        <p>MES制造执行系统</p>
+                    </div>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">概览</div>
+                    <div class="nav-item active" data-page="dashboard">
+                        <span class="nav-icon">📊</span>
+                        <span class="nav-text">电子看板</span>
+                    </div>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">采购管理</div>
+                    <div class="nav-item" data-page="purchase-orders">
+                        <span class="nav-icon">📋</span>
+                        <span class="nav-text">采购订单</span>
+                        <span class="nav-badge" id="poBadge">0</span>
+                    </div>
+                    <div class="nav-item" data-page="suppliers">
+                        <span class="nav-icon">🏭</span>
+                        <span class="nav-text">供应商管理</span>
+                    </div>
+                    <div class="nav-item" data-page="purchase-requests">
+                        <span class="nav-icon">📝</span>
+                        <span class="nav-text">采购申请</span>
+                    </div>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">仓库管理</div>
+                    <div class="nav-item" data-page="inventory">
+                        <span class="nav-icon">📦</span>
+                        <span class="nav-text">库存管理</span>
+                        <span class="nav-badge" id="invBadge">0</span>
+                    </div>
+                    <div class="nav-item" data-page="stock-in">
+                        <span class="nav-icon">📥</span>
+                        <span class="nav-text">入库管理</span>
+                    </div>
+                    <div class="nav-item" data-page="stock-out">
+                        <span class="nav-icon">📤</span>
+                        <span class="nav-text">出库管理</span>
+                    </div>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">生产管理</div>
+                    <div class="nav-item" data-page="production">
+                        <span class="nav-icon">🏭</span>
+                        <span class="nav-text">生产工单</span>
+                    </div>
+                    <div class="nav-item" data-page="quality">
+                        <span class="nav-icon">✓</span>
+                        <span class="nav-text">质量检验</span>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <h2 class="page-title" id="pageTitle">电子看板</h2>
+                <div class="user-info">
+                    <button class="notification-btn">
+                        🔔
+                        <span class="notification-badge"></span>
+                    </button>
+                    <div class="user-avatar">管</div>
+                    <span>管理员</span>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- 电子看板 -->
+                <section class="page-section active" id="dashboard">
+                    <div class="dashboard-board">
+                        <div class="dashboard-header">
+                            <div class="dashboard-title">生产运营监控中心</div>
+                            <div class="dashboard-time" id="dashboardTime">--:--:--</div>
+                        </div>
+                        
+                        <div class="kpi-grid">
+                            <div class="kpi-card">
+                                <div class="kpi-icon">📋</div>
+                                <div class="kpi-value" id="kpiOrders">0</div>
+                                <div class="kpi-label">待处理订单</div>
+                                <div class="kpi-trend up">↑ 12%</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-icon">📦</div>
+                                <div class="kpi-value" id="kpiInventory">0</div>
+                                <div class="kpi-label">库存物料种类</div>
+                                <div class="kpi-trend up">↑ 5%</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-icon">🏭</div>
+                                <div class="kpi-value" id="kpiProduction">0</div>
+                                <div class="kpi-label">生产中工单</div>
+                                <div class="kpi-trend down">↓ 3%</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-icon">⚠️</div>
+                                <div class="kpi-value" id="kpiAlert">0</div>
+                                <div class="kpi-label">库存预警</div>
+                                <div class="kpi-trend down">↓ 8%</div>
+                            </div>
+                        </div>
+
+                        <div class="board-charts">
+                            <div class="chart-card">
+                                <div class="chart-title">本周采购趋势</div>
+                                <div class="chart-content" id="purchaseChart"></div>
+                            </div>
+                            <div class="chart-card">
+                                <div class="chart-title">生产完成率</div>
+                                <div class="chart-content" id="productionChart"></div>
+                            </div>
+                        </div>
+
+                        <div class="alert-list" id="alertList"></div>
+                    </div>
+                </section>
+
+                <!-- 采购订单 -->
+                <section class="page-section" id="purchase-orders">
+                    <div class="toolbar">
+                        <div class="toolbar-left">
+                            <div class="search-box">
+                                <input type="text" placeholder="搜索订单号、供应商..." id="poSearch">
+                            </div>
+                            <select class="form-select" style="width: auto;" id="poFilter">
+                                <option value="">全部状态</option>
+                                <option value="待审批">待审批</option>
+                                <option value="已审批">已审批</option>
+                                <option value="已完成">已完成</option>
+                            </select>
+                        </div>
+                        <div class="toolbar-right">
+                            <button class="btn btn-primary" onclick="openAddModal('purchaseOrder')">+ 新建采购订单</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>订单号</th>
+                                        <th>供应商</th>
+                                        <th>物料</th>
+                                        <th>数量</th>
+                                        <th>金额</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="purchaseOrdersTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 供应商管理 -->
+                <section class="page-section" id="suppliers">
+                    <div class="toolbar">
+                        <div class="toolbar-left">
+                            <div class="search-box">
+                                <input type="text" placeholder="搜索供应商名称..." id="supSearch">
+                            </div>
+                        </div>
+                        <div class="toolbar-right">
+                            <button class="btn btn-primary" onclick="openAddModal('supplier')">+ 新增供应商</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>供应商编号</th>
+                                        <th>供应商名称</th>
+                                        <th>联系人</th>
+                                        <th>电话</th>
+                                        <th>等级</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="suppliersTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 采购申请 -->
+                <section class="page-section" id="purchase-requests">
+                    <div class="toolbar">
+                        <div class="toolbar-left">
+                            <div class="search-box">
+                                <input type="text" placeholder="搜索申请单号..." id="prSearch">
+                            </div>
+                        </div>
+                        <div class="toolbar-right">
+                            <button class="btn btn-primary" onclick="openAddModal('purchaseRequest')">+ 新建采购申请</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>申请单号</th>
+                                        <th>申请部门</th>
+                                        <th>物料名称</th>
+                                        <th>需求数量</th>
+                                        <th>期望日期</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="purchaseRequestsTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 库存管理 -->
+                <section class="page-section" id="inventory">
+                    <div class="toolbar">
+                        <div class="toolbar-left">
+                            <div class="search-box">
+                                <input type="text" placeholder="搜索物料编号、名称..." id="invSearch">
+                            </div>
+                            <select class="form-select" style="width: auto;" id="invFilter">
+                                <option value="">全部仓库</option>
+                                <option value="原材料仓">原材料仓</option>
+                                <option value="半成品仓">半成品仓</option>
+                                <option value="成品仓">成品仓</option>
+                                <option value="配件仓">配件仓</option>
+                                <option value="辅料仓">辅料仓</option>
+                            </select>
+                        </div>
+                        <div class="toolbar-right">
+                            <button class="btn btn-primary" onclick="openAddModal('material')">+ 新增物料</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>物料编号</th>
+                                        <th>物料名称</th>
+                                        <th>规格</th>
+                                        <th>仓库</th>
+                                        <th>库存数量</th>
+                                        <th>安全库存</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inventoryTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 入库管理 -->
+                <section class="page-section" id="stock-in">
+                    <div class="toolbar">
+                        <div class="toolbar-left">
+                            <div class="search-box">
+                                <input type="text" placeholder="搜索入库单号..." id="siSearch">
+                            </div>
+                        </div>
+                        <div class="toolbar-right">
+                            <button class="btn btn-primary" onclick="openAddModal('stockIn')">+ 新建入库单</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>入库单号</th>
+                                        <th>物料名称</th>
+                                        <th>数量</th>
+                                        <th>仓库</th>
+                                        <th>入库时间</th>
+                                        <th>操作人</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="stockInTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 出库管理 -->
+                <section class="page-section" id="stock-out">
+                    <div class="toolbar">
+                        <div class="toolbar-left">
+                            <div class="search-box">
+                                <input type="text" placeholder="搜索出库单号..." id="soSearch">
+                            </div>
+                        </div>
+                        <div class="toolbar-right">
+                            <button class="btn btn-primary" onclick="openAddModal('stockOut')">+ 新建出库单</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>出库单号</th>
+                                        <th>物料名称</th>
+                                        <th>数量</th>
+                                        <th>领用部门</th>
+                                        <th>出库时间</th>
+                                        <th>操作人</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="stockOutTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 生产工单 -->
+                <section class="page-section" id="production">
+                    <div class="toolbar">
+                        <div class="toolbar-left">
+                            <div class="search-box">
+                                <input type="text" placeholder="搜索工单号..." id="woSearch">
+                            </div>
+                        </div>
+                        <div class="toolbar-right">
+                            <button class="btn btn-primary" onclick="openAddModal('production')">+ 新建工单</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>工单号</th>
+                                        <th>产品名称</th>
+                                        <th>计划数量</th>
+                                        <th>完成数量</th>
+                                        <th>进度</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="productionTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 质量检验 -->
+                <section class="page-section" id="quality">
+                    <div class="toolbar">
+                        <div class="toolbar-left">
+                            <div class="search-box">
+                                <input type="text" placeholder="搜索检验单号..." id="qcSearch">
+                            </div>
+                        </div>
+                        <div class="toolbar-right">
+                            <button class="btn btn-primary" onclick="openAddModal('quality')">+ 新建检验单</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>检验单号</th>
+                                        <th>产品名称</th>
+                                        <th>批次号</th>
+                                        <th>检验数量</th>
+                                        <th>合格数</th>
+                                        <th>合格率</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="qualityTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- 通用模态框 -->
+    <div class="modal-overlay" id="dataModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">新建</h3>
+                <button class="modal-close" onclick="closeModal('dataModal')">×</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('dataModal')">取消</button>
+                <button class="btn btn-primary" id="modalSubmitBtn" onclick="submitForm()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 确认删除模态框 -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal" style="max-width: 400px;">
+            <div class="modal-body">
+                <div class="confirm-dialog">
+                    <div class="confirm-icon">⚠️</div>
+                    <div class="confirm-text">确定要删除这条记录吗？此操作不可恢复。</div>
+                    <div class="confirm-btns">
+                        <button class="btn btn-secondary" onclick="closeModal('confirmModal')">取消</button>
+                        <button class="btn btn-danger" id="confirmDeleteBtn">确认删除</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 数据存储
+        const Storage = {
+            get(key) {
+                const data = localStorage.getItem(key);
+                return data ? JSON.parse(data) : [];
+            },
+            set(key, data) {
+                localStorage.setItem(key, JSON.stringify(data));
+            }
+        };
+
+        // 初始化数据
+        function initData() {
+            if (Storage.get('purchaseOrders').length === 0) {
+                Storage.set('purchaseOrders', [
+                    { id: 'PO20260319001', supplier: '华东钢铁有限公司', material: '钢板 Q235B', quantity: '100吨', amount: '¥450,000', status: '待审批' },
+                    { id: 'PO20260318003', supplier: '南方铝业集团', material: '铝板 6061-T6', quantity: '50吨', amount: '¥280,000', status: '已审批' },
+                    { id: 'PO20260317002', supplier: '北方化工股份', material: '工业润滑油', quantity: '200桶', amount: '¥36,000', status: '已完成' }
+                ]);
+            }
+            if (Storage.get('suppliers').length === 0) {
+                Storage.set('suppliers', [
+                    { id: 'SUP001', name: '华东钢铁有限公司', contact: '王经理', phone: '13800138001', level: 'A级', status: '合作中' },
+                    { id: 'SUP002', name: '南方铝业集团', contact: '李总监', phone: '13900139002', level: 'A级', status: '合作中' },
+                    { id: 'SUP003', name: '北方化工股份', contact: '赵主管', phone: '13700137003', level: 'B级', status: '合作中' }
+                ]);
+            }
+            if (Storage.get('purchaseRequests').length === 0) {
+                Storage.set('purchaseRequests', [
+                    { id: 'PR20260319001', department: '生产部', material: '钢板 Q235B', quantity: '100吨', date: '2026-03-25', status: '待审批' },
+                    { id: 'PR20260318002', department: '维修部', material: '轴承 6205', quantity: '50个', date: '2026-03-22', status: '已批准' }
+                ]);
+            }
+            if (Storage.get('inventory').length === 0) {
+                Storage.set('inventory', [
+                    { id: 'M001', name: '钢板 Q235B', spec: '10mm*1500mm*6000mm', warehouse: '原材料仓', stock: '85吨', safety: '50吨', status: '正常' },
+                    { id: 'M002', name: '铝板 6061-T6', spec: '5mm*1220mm*2440mm', warehouse: '原材料仓', stock: '32吨', safety: '30吨', status: '偏低' },
+                    { id: 'M045', name: '轴承 6205', spec: '25*52*15mm', warehouse: '配件仓', stock: '15个', safety: '50个', status: '预警' },
+                    { id: 'M078', name: '工业润滑油', spec: '18L/桶', warehouse: '辅料仓', stock: '120桶', safety: '100桶', status: '正常' }
+                ]);
+            }
+            if (Storage.get('stockIn').length === 0) {
+                Storage.set('stockIn', [
+                    { id: 'SI20260319001', material: '钢板 Q235B', quantity: '50吨', warehouse: '原材料仓', time: '2026-03-19 11:20', operator: '李仓管' },
+                    { id: 'SI20260318003', material: '轴承 6205', quantity: '100个', warehouse: '配件仓', time: '2026-03-18 15:30', operator: '王仓管' }
+                ]);
+            }
+            if (Storage.get('stockOut').length === 0) {
+                Storage.set('stockOut', [
+                    { id: 'SO20260319002', material: '钢板 Q235B', quantity: '20吨', department: '生产部', time: '2026-03-19 14:00', operator: '李仓管' },
+                    { id: 'SO20260318005', material: '工业润滑油', quantity: '10桶', department: '设备部', time: '2026-03-18 16:45', operator: '张仓管' }
+                ]);
+            }
+            if (Storage.get('production').length === 0) {
+                Storage.set('production', [
+                    { id: 'WO20260319001', product: '机械臂组件 A1', plan: '100套', completed: '65套', progress: 65, status: '生产中' },
+                    { id: 'WO20260318002', product: '传动轴 B3', plan: '200件', completed: '200件', progress: 100, status: '已完成' },
+                    { id: 'WO20260317003', product: '控制箱 C2', plan: '50台', completed: '15台', progress: 30, status: '生产中' }
+                ]);
+            }
+            if (Storage.get('quality').length === 0) {
+                Storage.set('quality', [
+                    { id: 'QC20260319001', product: '机械臂组件 A1', batch: 'BT2026031901', quantity: '50套', passed: '48套', rate: '96%', status: '合格' },
+                    { id: 'QC20260318003', product: '传动轴 B3', batch: 'BT2026031803', quantity: '100件', passed: '95件', rate: '95%', status: '合格' },
+                    { id: 'QC20260317002', product: '控制箱 C2', batch: 'BT2026031702', quantity: '20台', passed: '17台', rate: '85%', status: '待复检' }
+                ]);
+            }
+        }
+
+        // 表单配置
+        const formConfigs = {
+            purchaseOrder: {
+                title: '采购订单',
+                fields: [
+                    { name: 'id', label: '订单号', type: 'text', required: true },
+                    { name: 'supplier', label: '供应商', type: 'text', required: true },
+                    { name: 'material', label: '物料', type: 'text', required: true },
+                    { name: 'quantity', label: '数量', type: 'text', required: true },
+                    { name: 'amount', label: '金额', type: 'text', required: true },
+                    { name: 'status', label: '状态', type: 'select', options: ['待审批', '已审批', '已完成'], required: true }
+                ],
+                storage: 'purchaseOrders'
+            },
+            supplier: {
+                title: '供应商',
+                fields: [
+                    { name: 'id', label: '供应商编号', type: 'text', required: true },
+                    { name: 'name', label: '供应商名称', type: 'text', required: true },
+                    { name: 'contact', label: '联系人', type: 'text', required: true },
+                    { name: 'phone', label: '电话', type: 'text', required: true },
+                    { name: 'level', label: '等级', type: 'select', options: ['A级', 'B级', 'C级'], required: true },
+                    { name: 'status', label: '状态', type: 'select', options: ['合作中', '已暂停', '已终止'], required: true }
+                ],
+                storage: 'suppliers'
+            },
+            purchaseRequest: {
+                title: '采购申请',
+                fields: [
+                    { name: 'id', label: '申请单号', type: 'text', required: true },
+                    { name: 'department', label: '申请部门', type: 'select', options: ['生产部', '维修部', '质检部', '设备部'], required: true },
+                    { name: 'material', label: '物料名称', type: 'text', required: true },
+                    { name: 'quantity', label: '需求数量', type: 'text', required: true },
+                    { name: 'date', label: '期望日期', type: 'date', required: true },
+                    { name: 'status', label: '状态', type: 'select', options: ['待审批', '已批准', '已拒绝'], required: true }
+                ],
+                storage: 'purchaseRequests'
+            },
+            material: {
+                title: '物料',
+                fields: [
+                    { name: 'id', label: '物料编号', type: 'text', required: true },
+                    { name: 'name', label: '物料名称', type: 'text', required: true },
+                    { name: 'spec', label: '规格', type: 'text', required: true },
+                    { name: 'warehouse', label: '仓库', type: 'select', options: ['原材料仓', '半成品仓', '成品仓', '配件仓', '辅料仓'], required: true },
+                    { name: 'stock', label: '库存数量', type: 'text', required: true },
+                    { name: 'safety', label: '安全库存', type: 'text', required: true },
+                    { name: 'status', label: '状态', type: 'select', options: ['正常', '偏低', '预警'], required: true }
+                ],
+                storage: 'inventory'
+            },
+            stockIn: {
+                title: '入库单',
+                fields: [
+                    { name: 'id', label: '入库单号', type: 'text', required: true },
+                    { name: 'material', label: '物料名称', type: 'text', required: true },
+                    { name: 'quantity', label: '数量', type: 'text', required: true },
+                    { name: 'warehouse', label: '仓库', type: 'select', options: ['原材料仓', '半成品仓', '成品仓', '配件仓', '辅料仓'], required: true },
+                    { name: 'time', label: '入库时间', type: 'datetime-local', required: true },
+                    { name: 'operator', label: '操作人', type: 'text', required: true }
+                ],
+                storage: 'stockIn'
+            },
+            stockOut: {
+                title: '出库单',
+                fields: [
+                    { name: 'id', label: '出库单号', type: 'text', required: true },
+                    { name: 'material', label: '物料名称', type: 'text', required: true },
+                    { name: 'quantity', label: '数量', type: 'text', required: true },
+                    { name: 'department', label: '领用部门', type: 'select', options: ['生产部', '维修部', '设备部', '质检部'], required: true },
+                    { name: 'time', label: '出库时间', type: 'datetime-local', required: true },
+                    { name: 'operator', label: '操作人', type: 'text', required: true }
+                ],
+                storage: 'stockOut'
+            },
+            production: {
+                title: '生产工单',
+                fields: [
+                    { name: 'id', label: '工单号', type: 'text', required: true },
+                    { name: 'product', label: '产品名称', type: 'text', required: true },
+                    { name: 'plan', label: '计划数量', type: 'text', required: true },
+                    { name: 'completed', label: '完成数量', type: 'text', required: true },
+                    { name: 'progress', label: '进度(%)', type: 'number', required: true },
+                    { name: 'status', label: '状态', type: 'select', options: ['生产中', '已完成', '已暂停'], required: true }
+                ],
+                storage: 'production'
+            },
+            quality: {
+                title: '质量检验',
+                fields: [
+                    { name: 'id', label: '检验单号', type: 'text', required: true },
+                    { name: 'product', label: '产品名称', type: 'text', required: true },
+                    { name: 'batch', label: '批次号', type: 'text', required: true },
+                    { name: 'quantity', label: '检验数量', type: 'text', required: true },
+                    { name: 'passed', label: '合格数', type: 'text', required: true },
+                    { name: 'rate', label: '合格率', type: 'text', required: true },
+                    { name: 'status', label: '状态', type: 'select', options: ['合格', '不合格', '待复检'], required: true }
+                ],
+                storage: 'quality'
+            }
+        };
+
+        let currentFormType = null;
+        let editingIndex = -1;
+
+        // 渲染表格
+        function renderTable(type) {
+            const data = Storage.get(formConfigs[type].storage);
+            const tableId = {
+                purchaseOrder: 'purchaseOrdersTable',
+                supplier: 'suppliersTable',
+                purchaseRequest: 'purchaseRequestsTable',
+                material: 'inventoryTable',
+                stockIn: 'stockInTable',
+                stockOut: 'stockOutTable',
+                production: 'productionTable',
+                quality: 'qualityTable'
+            }[type];
+            
+            const tbody = document.getElementById(tableId);
+            
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="10"><div class="empty-state"><div class="empty-state-icon">📭</div><p>暂无数据，点击"新建"按钮添加</p></div></td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = data.map((item, index) => {
+                let row = '';
+                const config = formConfigs[type];
+                
+                config.fields.forEach(field => {
+                    let value = item[field.name] || '';
+                    if (field.name === 'status') {
+                        const statusClass = value === '已完成' || value === '合格' || value === '合作中' || value === '已批准' || value === '正常' ? 'success' :
+                                          value === '待审批' || value === '生产中' || value === '偏低' || value === '待复检' ? 'warning' :
+                                          value === '预警' || value === '不合格' || value === '已拒绝' ? 'danger' : 'info';
+                        value = `<span class="status-badge ${statusClass}">${value}</span>`;
+                    } else if (field.name === 'progress') {
+                        value = `<div class="progress-bar"><div class="progress-fill" style="width: ${value}%"></div></div>`;
+                    }
+                    row += `<td>${value}</td>`;
+                });
+                
+                row += `<td><div class="action-btns">
+                    <button class="btn btn-sm btn-secondary" onclick="editItem('${type}', ${index})">编辑</button>
+                    <button class="btn btn-sm btn-danger" onclick="confirmDelete('${type}', ${index})">删除</button>
+                </div></td>`;
+                
+                return `<tr>${row}</tr>`;
+            }).join('');
+        }
+
+        // 打开添加模态框
+        function openAddModal(type) {
+            currentFormType = type;
+            editingIndex = -1;
+            const config = formConfigs[type];
+            document.getElementById('modalTitle').textContent = `新建${config.title}`;
+            renderForm(config.fields, {});
+            openModal('dataModal');
+        }
+
+        // 编辑项目
+        function editItem(type, index) {
+            currentFormType = type;
+            editingIndex = index;
+            const config = formConfigs[type];
+            const data = Storage.get(config.storage);
+            const item = data[index];
+            document.getElementById('modalTitle').textContent = `编辑${config.title}`;
+            renderForm(config.fields, item);
+            openModal('dataModal');
+        }
+
+        // 渲染表单
+        function renderForm(fields, data) {
+            const body = document.getElementById('modalBody');
+            body.innerHTML = fields.map(field => {
+                const value = data[field.name] || '';
+                let input = '';
+                
+                if (field.type === 'select') {
+                    input = `<select class="form-select" name="${field.name}" ${field.required ? 'required' : ''}>
+                        ${field.options.map(opt => `<option value="${opt}" ${value === opt ? 'selected' : ''}>${opt}</option>`).join('')}
+                    </select>`;
+                } else if (field.type === 'textarea') {
+                    input = `<textarea class="form-textarea" name="${field.name}" ${field.required ? 'required' : ''}>${value}</textarea>`;
+                } else {
+                    input = `<input type="${field.type}" class="form-input" name="${field.name}" value="${value}" ${field.required ? 'required' : ''}>`;
+                }
+                
+                return `<div class="form-group">
+                    <label class="form-label">${field.label}${field.required ? ' *' : ''}</label>
+                    ${input}
+                </div>`;
+            }).join('');
+        }
+
+        // 提交表单
+        function submitForm() {
+            const config = formConfigs[currentFormType];
+            const form = document.getElementById('modalBody');
+            const inputs = form.querySelectorAll('[name]');
+            const item = {};
+            let valid = true;
+            
+            inputs.forEach(input => {
+                const name = input.name;
+                const value = input.value.trim();
+                const field = config.fields.find(f => f.name === name);
+                
+                if (field.required && !value) {
+                    valid = false;
+                    input.style.borderColor = 'var(--danger-color)';
+                } else {
+                    input.style.borderColor = '';
+                    item[name] = value;
+                }
+            });
+            
+            if (!valid) {
+                alert('请填写所有必填项');
+                return;
+            }
+            
+            const data = Storage.get(config.storage);
+            
+            if (editingIndex === -1) {
+                data.push(item);
+            } else {
+                data[editingIndex] = item;
+            }
+            
+            Storage.set(config.storage, data);
+            renderTable(currentFormType);
+            updateDashboard();
+            closeModal('dataModal');
+        }
+
+        // 确认删除
+        function confirmDelete(type, index) {
+            currentFormType = type;
+            editingIndex = index;
+            openModal('confirmModal');
+            
+            document.getElementById('confirmDeleteBtn').onclick = function() {
+                deleteItem();
+            };
+        }
+
+        // 删除项目
+        function deleteItem() {
+            const config = formConfigs[currentFormType];
+            const data = Storage.get(config.storage);
+            data.splice(editingIndex, 1);
+            Storage.set(config.storage, data);
+            renderTable(currentFormType);
+            updateDashboard();
+            closeModal('confirmModal');
+        }
+
+        // 模态框控制
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        // 搜索和筛选
+        function setupSearch(searchId, tableId, filterId) {
+            const searchInput = document.getElementById(searchId);
+            const filterSelect = filterId ? document.getElementById(filterId) : null;
+            
+            if (searchInput) {
+                searchInput.addEventListener('input', () => filterTable(searchId, tableId, filterId));
+            }
+            if (filterSelect) {
+                filterSelect.addEventListener('change', () => filterTable(searchId, tableId, filterId));
+            }
+        }
+
+        function filterTable(searchId, tableId, filterId) {
+            const searchValue = document.getElementById(searchId)?.value.toLowerCase() || '';
+            const filterValue = filterId ? document.getElementById(filterId)?.value : '';
+            const tbody = document.getElementById(tableId);
+            const rows = tbody.querySelectorAll('tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                const matchSearch = text.includes(searchValue);
+                const matchFilter = !filterValue || text.includes(filterValue);
+                row.style.display = matchSearch && matchFilter ? '' : 'none';
+            });
+        }
+
+        // 更新仪表盘
+        function updateDashboard() {
+            const orders = Storage.get('purchaseOrders');
+            const inventory = Storage.get('inventory');
+            const production = Storage.get('production');
+            
+            const pendingOrders = orders.filter(o => o.status === '待审批').length;
+            const activeProduction = production.filter(p => p.status === '生产中').length;
+            const alerts = inventory.filter(i => i.status === '预警' || i.status === '偏低').length;
+            
+            document.getElementById('kpiOrders').textContent = pendingOrders;
+            document.getElementById('kpiInventory').textContent = inventory.length;
+            document.getElementById('kpiProduction').textContent = activeProduction;
+            document.getElementById('kpiAlert').textContent = alerts;
+            
+            document.getElementById('poBadge').textContent = pendingOrders;
+            document.getElementById('invBadge').textContent = alerts;
+            
+            renderCharts();
+            renderAlerts();
+        }
+
+        // 渲染图表
+        function renderCharts() {
+            const purchaseChart = document.getElementById('purchaseChart');
+            const productionChart = document.getElementById('productionChart');
+            
+            const purchaseData = [60, 80, 45, 90, 70, 85, 95];
+            const days = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+            
+            purchaseChart.innerHTML = purchaseData.map((val, i) => 
+                `<div class="chart-bar" style="height: ${val}%">
+                    <span class="chart-bar-label">${days[i]}</span>
+                </div>`
+            ).join('');
+            
+            const productionData = [85, 92, 78, 95, 88];
+            const products = ['A1', 'B3', 'C2', 'D4', 'E5'];
+            
+            productionChart.innerHTML = productionData.map((val, i) => 
+                `<div class="chart-bar" style="height: ${val}%; background: linear-gradient(180deg, #10b981, #059669);">
+                    <span class="chart-bar-label">${products[i]}</span>
+                </div>`
+            ).join('');
+        }
+
+        // 渲染预警
+        function renderAlerts() {
+            const inventory = Storage.get('inventory');
+            const alerts = inventory.filter(i => i.status === '预警' || i.status === '偏低');
+            const alertList = document.getElementById('alertList');
+            
+            if (alerts.length === 0) {
+                alertList.innerHTML = '';
+                return;
+            }
+            
+            alertList.innerHTML = alerts.map(item => 
+                `<div class="alert-item">
+                    <span class="alert-icon">⚠️</span>
+                    <span class="alert-text">物料 ${item.name} (${item.id}) 库存${item.status === '预警' ? '低于安全值' : '偏低'}，当前: ${item.stock}，安全库存: ${item.safety}</span>
+                    <span class="alert-time">刚刚</span>
+                </div>`
+            ).join('');
+        }
+
+        // 更新时间
+        function updateTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleString('zh-CN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+            document.getElementById('dashboardTime').textContent = timeStr;
+        }
+
+        // 页面导航
+        const navItems = document.querySelectorAll('.nav-item');
+        const pageSections = document.querySelectorAll('.page-section');
+        const pageTitle = document.getElementById('pageTitle');
+
+        const pageTitles = {
+            'dashboard': '电子看板',
+            'purchase-orders': '采购订单',
+            'suppliers': '供应商管理',
+            'purchase-requests': '采购申请',
+            'inventory': '库存管理',
+            'stock-in': '入库管理',
+            'stock-out': '出库管理',
+            'production': '生产工单',
+            'quality': '质量检验'
+        };
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const page = item.getAttribute('data-page');
+                navItems.forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+                pageSections.forEach(section => section.classList.remove('active'));
+                document.getElementById(page).classList.add('active');
+                pageTitle.textContent = pageTitles[page];
+            });
+        });
+
+        // 点击模态框外部关闭
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.classList.remove('active');
+                }
+            });
+        });
+
+        // 初始化
+        initData();
+        
+        // 渲染所有表格
+        Object.keys(formConfigs).forEach(type => renderTable(type));
+        
+        // 设置搜索
+        setupSearch('poSearch', 'purchaseOrdersTable', 'poFilter');
+        setupSearch('supSearch', 'suppliersTable');
+        setupSearch('prSearch', 'purchaseRequestsTable');
+        setupSearch('invSearch', 'inventoryTable', 'invFilter');
+        setupSearch('siSearch', 'stockInTable');
+        setupSearch('soSearch', 'stockOutTable');
+        setupSearch('woSearch', 'productionTable');
+        setupSearch('qcSearch', 'qualityTable');
+        
+        // 更新仪表盘
+        updateDashboard();
+        updateTime();
+        setInterval(updateTime, 1000);
+        
+        console.log('金亮子木MES系统已启动');
+    </script>
+</body>
+</html>
