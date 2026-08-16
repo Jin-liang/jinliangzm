@@ -1,0 +1,114 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>地面突击队Rogue One: Boots on the Ground</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimal-ui">
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<script src="js/libs/pixi/pixi.js"></script>
+<script src="js/libs/pixi/pixi-spine.js"></script>
+<script src="js/libs/pixi/pixi-ext.js"></script>
+<script src="js/libs/pixi-particles.js"></script>
+<script src="js/libs/p2/p2.js"></script>
+<script src="js/libs/signals.min.js"></script>
+<script src="js/libs/greensock/TweenMax.min.js"></script>
+<script src="js/libs/howler.min.js"></script>
+<script src="js/libs/bowser/bowser.min.js"></script>
+<script src="js/libs/SAT.js"></script>
+<script src="js/libs/binary.heap.js"></script>
+<script src="js/libs/jquery-2.1.4.min.js"></script>
+<script src="p3.min.js"></script>
+<script src="bundle.min.js"></script>
+<script src="gameConfig/isl.js"></script>
+<meta name="apple-mobile-web-app-title" content="地面突击">
+<meta name="application-name" content="地面突击">
+<meta name="keywords" content="地面突击" />
+<meta name="description" content="地面突击" />
+<link rel="apple-touch-icon" href="icon.png" />
+<link rel="shortcut icon" href="icon.png" />
+<link rel="icon" href="icon.png" />
+<style>
+body {
+background-image: none;
+background-color: #000000;
+}
+#game {
+position: absolute;
+width: 100%;
+height: 100%;
+}
+</style>
+</head>
+<body>
+<div id="game"></div>
+<script>
+// 中文补丁：替换位图字体为PIXI.Text（支持中文）
+(function(){
+    if (!window.PIXI || !PIXI.extras || !PIXI.extras.BitmapText) return;
+    var Orig = PIXI.extras.BitmapText;
+    PIXI.extras.BitmapText = function(text, style) {
+        var fs = 44, tint = 0xFFFFFF, align = 'left';
+        if (style && typeof style === 'object') {
+            if (style.font) { var m = style.font.match(/(\d+)/); if (m) fs = parseInt(m[1]); }
+            if (style.tint !== undefined) tint = style.tint;
+            if (style.align) align = style.align;
+        }
+        var c = '#' + ('000000' + tint.toString(16)).slice(-6);
+        PIXI.Text.call(this, text || '', {
+            fontFamily: 'sans-serif', fontSize: fs || 44, fill: c, align: align, fontWeight: 'bold'
+        });
+    };
+    PIXI.extras.BitmapText.prototype = Object.create(PIXI.Text.prototype);
+    PIXI.extras.BitmapText.prototype.constructor = PIXI.extras.BitmapText;
+    // 保留原始静态属性，防止字体注册失败
+    PIXI.extras.BitmapText.fonts = {};
+    for (var key in Orig) { if (Orig.hasOwnProperty(key)) PIXI.extras.BitmapText[key] = Orig[key]; }
+    if (Orig.fonts) { for (var k in Orig.fonts) { PIXI.extras.BitmapText.fonts[k] = Orig.fonts[k]; } }
+})();
+
+// 音频补丁：处理损坏的音频文件，防止错误干扰游戏
+(function(){
+    if (!window.Howl) return;
+    var OrigHowl = window.Howl;
+    window.Howl = function(options) {
+        options = options || {};
+        // 静默处理音频加载错误，防止控制台刷屏
+        options.onloaderror = options.onloaderror || function(id, err) {
+            // 静默忽略，音频文件已损坏
+        };
+        options.onplayerror = options.onplayerror || function(id, err) {
+            // 静默忽略
+        };
+        OrigHowl.call(this, options);
+    };
+    Howl.prototype = OrigHowl.prototype;
+    Howl.prototype.constructor = Howl;
+})();
+</script>
+<script>
+if ($("html").hasClass("ie") || (Function("/*@cc_on return document.documentMode===10@*/")())) {
+var nowebgl = $("<div />").attr({
+"id": "nowebgl"
+}).css({
+"width": "100%",
+"height": "100%",
+"background-position": "50% 50%",
+"background-repeat": "no-repeat",
+"background-image": "url('./unsupported.jpg')",
+"background-color": "#000000",
+"background-size": "auto 100%"
+}).appendTo("#game");
+} else {
+var language = "zh";
+var main = new Main(1024, 768);
+//runISL(main);
+main.init();
+}		
+</script>
+
+</body>
+</html>

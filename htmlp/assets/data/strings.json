@@ -1,0 +1,374 @@
+{
+	"preloader_percentage": {
+		"en": "[VALUE]%",
+		"zh": "[VALUE]%"
+	},
+	"preloader_loading": {
+		"en": "loading",
+		"zh": "加载中"
+	},
+	"STORY_MODE":{
+		"en": "MISSIONS",
+		"zh": "任务模式"
+	},
+	"SURVIVAL_MODE":{
+		"en": "SURVIVAL",
+		"zh": "生存模式"
+	},
+	"COMING_SOON":{
+		"en": "Coming soon...",
+		"zh": "即将推出..."
+	},
+	"ARE_YOU_SURE_ARCADE":{
+		"en": "Are you sure you want \nto visit the Arcade?",
+		"zh": "确定要访问街机游戏吗？"
+	},
+	"ARE_YOU_SURE_SKIP_TUTORIAL":{
+		"en": "Are you sure you want \nto skip training?",
+		"zh": "确定要跳过训练吗？"
+	},
+	"STORY_MODE_COMING_SOON_TITLE":{
+		"en": "Missions Mode",
+		"zh": "任务模式"
+	},
+	"STORY_MODE_COMING_SOON_DESCRIPTION":{
+		"en": "Delve into the world of Rogue One, \nas you journey across three planets unlocking \nall your favourite characters along the way.\n\nTest your skills and see if you have \nwhat it takes to lead the Rebellion.\n\n\nComing Soon",
+		"zh": "深入侠盗一号的世界，穿越三个星球，解锁所有你喜爱的角色。\n\n测试你的技能，看看你是否具备领导义军的能力。\n\n\n即将推出"
+	},
+	"PAUSED":{
+		"en": "Paused",
+		"zh": "暂停"
+	},
+	"QUIT_GAME":{
+		"en": "Quit Game",
+		"zh": "退出游戏"
+	},
+	"ARE_YOU_SURE":{
+		"en": "Are you sure?",
+		"zh": "确定吗？"
+	},
+	"HOW_TO_PLAY":{
+		"en": "How to Play",
+		"zh": "游戏说明"
+	},
+	"GAME_OVER":{
+		"en": "Game Over",
+		"zh": "游戏结束"
+	},
+	"WELL_DONE":{
+		"en": "Well Done {NAME}!",
+		"zh": "干得好，{NAME}！"
+	},
+	"TRY_AGAIN":{
+		"en": "Try Again, {NAME}!",
+		"zh": "再试一次，{NAME}！"
+	},
+	"HIGHSCORE":{
+		"en": "Hi-Score",
+		"zh": "最高分"
+	},
+	"LOADING_SCORES":{
+		"en": "Loading...",
+		"zh": "加载中..."
+	},
+	"NO_SCORES_FOUND":{
+		"en": "No Scores Found",
+		"zh": "没有找到分数"
+	},
+	"ENTER_YOUR_NAME":{
+		"en": "Enter Your Name",
+		"zh": "输入你的名字"
+	},
+	"MAP":{
+		"en": "Map",
+		"zh": "地图"
+	},
+	"MAP_LEGEND_PLAYER":{
+		"en": "You",
+		"zh": "你"
+	},
+	"MAP_LEGEND_ENEMY":{
+		"en": "Enemy",
+		"zh": "敌人"
+	},
+	"MAP_LEGEND_GOAL":{
+		"en": "Goal",
+		"zh": "目标"
+	},
+	"MAP_LEGEND_HEALTH":{
+		"en": "Health",
+		"zh": "生命值"
+	},
+	"TROPHIES":{
+		"en": "Medals",
+		"zh": "勋章"
+	},
+	"LEADERBOARD":{
+		"en": "Leaderboard",
+		"zh": "排行榜"
+	},
+	"BEST":{
+		"en": "BEST",
+		"zh": "最佳"
+	},
+	"CURRENT_MISSION":{
+		"en": "Current Goal",
+		"zh": "当前目标"
+	},
+	"NEW_MISSION":{
+		"en": "New Goal",
+		"zh": "新目标"
+	},
+	"MISSION_FAILED":{
+		"en": "Mission Failed",
+		"zh": "任务失败"
+	},
+	"MISSIONS_COMPLETED":{
+		"en": "Goals\nCompleted",
+		"zh": "已完成目标"
+	},
+	"MISSION_SUCCESS":{
+		"en": ["Great Work, Troops", "Well Done, Soldiers", "Our Unit Survived", "Mon Mothma would be Proud", "Mission Complete!", "Fine Work, Soldiers", "Great Team Work", "Well Done, Trooper!", "For the Rebellion", "Perfectly Executed", "That Took Guts!", "Good Work, Team"],
+		"zh": ["干得好，战士们", "做得好，士兵们", "我们的小队存活了", "蒙·莫斯玛会为你骄傲", "任务完成！", "出色的工作，士兵们", "团队合作很棒", "做得好，战士！", "为了义军", "执行完美", "真有胆量！", "干得好，团队"]
+	},
+	"GOALS_TO_GO":{
+		"en": "{value}/{total}!",
+		"zh": "{value}/{total}！"
+	},
+	"SECONDS_TO_GO":{
+		"en": "{value} seconds to go!",
+		"zh": "还剩 {value} 秒！"
+	},
+	"MISSION_TUTORIAL1_TITLE":{
+		"en": "How to Play",
+		"zh": "游戏说明"
+	},
+	"MISSION_TUTORIAL1_DESCRIPTION":{
+		"en": "Follow the Arrow",
+		"zh": "跟随箭头"
+	},
+	"MISSION_TUTORIAL2_TITLE":{
+		"en": "How to Play",
+		"zh": "游戏说明"
+	},
+	"MISSION_TUTORIAL2_DESCRIPTION":{
+		"en": "Destroy the Target",
+		"zh": "摧毁目标"
+	},
+	"MISSION_TUTORIAL3_TITLE":{
+		"en": "Congratulations!!!",
+		"zh": "恭喜！！！"
+	},
+	"MISSION_TUTORIAL3_DESCRIPTION":{
+		"en": "You Completed your Training",
+		"zh": "你完成了训练"
+	},
+	"MISSION_FREE_HOSTAGE_DESCRIPTION":{
+		"en": "Rescue the Pilot",
+		"zh": "营救飞行员"
+	},
+	"MISSION_RECOVER_ITEM_DESCRIPTION":{
+		"en": "Recover the Item",
+		"zh": "回收物品"
+	},
+	"MISSION_DESTROY_TARGET_DESCRIPTION":{
+		"en": "Destroy the Targets",
+		"zh": "摧毁目标"
+	},
+	"MISSION_DESTROY_TARGET_STEP_1":{
+		"en": "{value}/{total} destroyed!",
+		"zh": "已摧毁 {value}/{total}！"
+	},
+	"MISSION_DEFEAT_ENEMY_DESCRIPTION":{
+		"en": "Knock out {value} Enemies",
+		"zh": "击败 {value} 个敌人"
+	},
+	"MISSION_DEFEAT_ENEMY_STEP_1":{
+		"en": "{value}/{total} defeated!",
+		"zh": "已击败 {value}/{total}！"
+	},
+	"MISSION_ESCORT_DESCRIPTION":{
+		"en": "Find and Protect the Pilot",
+		"zh": "找到并保护飞行员"
+	},
+	"MISSION_ESCORT_STEP_1":{
+		"en": "Find the Pilot",
+		"zh": "找到飞行员"
+	},
+	"MISSION_ESCORT_STEP_2":{
+		"en": "Protect the Pilot",
+		"zh": "保护飞行员"
+	},
+	"MISSION_ESCORT_FAILED":{
+		"en": "The Pilot was Captured",
+		"zh": "飞行员被俘了"
+	},
+	"MISSION_ENEMY_WAVES_DESCRIPTION":{
+		"en": "Survive for {value} seconds",
+		"zh": "生存 {value} 秒"
+	},
+	"MISSION_ENEMY_WAVES_STEP_1":{
+		"en": "{value} seconds to go!",
+		"zh": "还剩 {value} 秒！"
+	},
+	"MISSION_PROTECT_CARGO_DESCRIPTION":{
+		"en": "Find and Protect the Cargo",
+		"zh": "找到并保护物资"
+	},
+	"MISSION_PROTECT_CARGO_STEP_1":{
+		"en": "Find the Cargo",
+		"zh": "找到物资"
+	},
+	"MISSION_PROTECT_CARGO_STEP_2":{
+		"en": "{value} seconds to go!",
+		"zh": "还剩 {value} 秒！"
+	},
+	"MISSION_PROTECT_CARGO_FAILED":{
+		"en": "The Cargo has been Destroyed",
+		"zh": "物资被摧毁了"
+	},
+	"MISSION_DESTROY_TANK_DESCRIPTION":{
+		"en": "Find and Destroy the Convoy",
+		"zh": "找到并摧毁车队"
+	},
+	"MISSION_DESTROY_TANK_STEP_1":{
+		"en": "Find and destroy the convoy",
+		"zh": "找到并摧毁车队"
+	},
+	"MISSION_DESTROY_TANK_STEP_2":{
+		"en": "Stop it reaching the base!",
+		"zh": "阻止它到达基地！"
+	},
+	"MISSION_DESTROY_TANK_FAILED":{
+		"en": "The Convoy reached its Destination",
+		"zh": "车队到达了目的地"
+	},
+	"HELP_MOVE_PC":{
+		"en": "Click the Ground to move your Troops",
+		"zh": "点击地面移动你的部队"
+	},
+	"HELP_MOVE_MOB":{
+		"en": "Tap the ground to move your Troops",
+		"zh": "触摸地面移动你的部队"
+	},
+	"HELP_SHOOT_PC":{
+		"en": "Click on an Enemy to engage in combat",
+		"zh": "点击敌人进行战斗"
+	},
+	"HELP_SHOOT_MOB":{
+		"en": "Tap on an Enemy to engage in combat",
+		"zh": "触摸敌人进行战斗"
+	},
+	"HELP_MAP_PC":{
+		"en": "Click on the compass to open the map",
+		"zh": "点击指南针打开地图"
+	},
+	"HELP_MAP_MOB":{
+		"en": "Tap on the compass to open the map",
+		"zh": "触摸指南针打开地图"
+	},
+	"HELP_AIRSTRIKE":{
+		"en": "Click on Cassian to trigger an Airstrike",
+		"zh": "点击卡西安触发空袭"
+	},
+	"HELP_GRANADE":{
+		"en": "Click on K-2SO to activate the grenade.\nClick the ground to throw",
+		"zh": "点击 K-2SO 激活手雷，点击地面投掷"
+	},
+	"HELP_SNIPER":{
+		"en": "Click the Sniper trooper to prepare his weapon.\nChoose a target to fire",
+		"zh": "点击狙击手准备武器，选择目标开火"
+	},
+	"TROPHY_ACHIEVED":{
+		"en": "Medal Achieved!",
+		"zh": "获得勋章！"
+	},
+	"TROPHY_COMING_SOON_1":{
+		"en": "Coming Soon",
+		"zh": "即将推出"
+	},
+	"TROPHY_COMING_SOON_2":{
+		"en": "In Mission Mode",
+		"zh": "在任务模式中"
+	},
+	"TOKEN_ACHIEVED":{
+		"en": "Token Won!",
+		"zh": "获得代币！"
+	},
+	"TOKEN_DESCRIPTION":{
+		"en": "Spend it in the Star Wars Arcade",
+		"zh": "在星球大战街机上使用"
+	},
+	"game_boots_trophy1_name":{
+		"en": "Rookie Rebel",
+		"zh": "义军新兵"
+	},
+	"game_boots_trophy1_description":{
+		"en": "Complete your first goal in Survival mode",
+		"zh": "在生存模式中完成第一个目标"
+	},
+	"game_boots_trophy2_name":{
+		"en": "Rebel Leader",
+		"zh": "义军领袖"
+	},
+	"game_boots_trophy2_description":{
+		"en": "Complete 5 goals in one round of Survival mode",
+		"zh": "在生存模式一轮中完成5个目标"
+	},
+	"game_boots_trophy3_name":{
+		"en": "Rebel Master",
+		"zh": "义军大师"
+	},
+	"game_boots_trophy3_description":{
+		"en": "Complete 10 goals in one round of Survival mode",
+		"zh": "在生存模式一轮中完成10个目标"
+	},
+	"game_boots_trophy4_name":{
+		"en": "United We Stand",
+		"zh": "团结一心"
+	},
+	"game_boots_trophy4_description":{
+		"en": "Survive 10 goals with all 3 squad members",
+		"zh": "在3名小队成员全部存活的情况下生存10个目标"
+	},
+	"game_boots_trophy5_name":{
+		"en": "Great Work, Troops",
+		"zh": "干得好，战士们"
+	},
+	"game_boots_trophy5_description":{
+		"en": "Complete your first mission in Story mode",
+		"zh": "在故事模式中完成第一个任务"
+	},
+	"game_boots_trophy6_name":{
+		"en": "Perfectly executed plan",
+		"zh": "完美执行"
+	},
+	"game_boots_trophy6_description":{
+		"en": "Complete a mission with 3 stars in Story mode",
+		"zh": "在故事模式中3星完成一个任务"
+	},
+	"game_boots_trophy7_name":{
+		"en": "Mission complete",
+		"zh": "任务完成"
+	},
+	"game_boots_trophy7_description":{
+		"en": "Complete all missions in Story mode",
+		"zh": "在故事模式中完成所有任务"
+	},
+	"game_boots_trophy8_name":{
+		"en": "Together in victory",
+		"zh": "共同胜利"
+	},
+	"game_boots_trophy8_description":{
+		"en": "Complete all missions with 3 stars in Story mode",
+		"zh": "在故事模式中3星完成所有任务"
+	},
+	"game_boots_trophy9_name":{
+		"en": "May the Force be with you",
+		"zh": "愿原力与你同在"
+	},
+	"game_boots_trophy9_description":{
+		"en": "Fully upgrade a character in Story mode",
+		"zh": "在故事模式中完全升级一个角色"
+	}
+}
